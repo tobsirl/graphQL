@@ -12,7 +12,7 @@ On the backend, GraphQL specifies to the API how to present the data to the clie
 GraphQL is about asking for specific fields on objects.
 `Field` name returns a `Type` of `String`
 
-```json
+```js
 # request
 {
   viewer {
@@ -32,17 +32,15 @@ GraphQL is about asking for specific fields on objects.
 }
 ```
 
-
-
 ### Arguments
 
 Passing arguments allows us to specify the data we require.
 Every field and nested object can get its own set of arguements, making GraphQL a complete replacement for making multiple API fetches.
 
-```json
+```js
 # request
 {
-  human(id: "1000") {  
+  human(id: "1000") {
     name
     height
   }
@@ -59,9 +57,59 @@ Every field and nested object can get its own set of arguements, making GraphQL 
 }
 ```
 
+### Aliases
+
+Aliases allow you to rename the result of a field
+
+```json
+# request
+{
+  empireHero: hero(episode: EMPIRE) {
+    name
+  }
+  jediHero: hero(episode: JEDI) {
+    name
+  }
+}
+
+# response
+{
+  "data": {
+    "empireHero": {
+      "name": "Luke Skywalker"
+    },
+    "jediHero": {
+      "name": "R2-D2"
+    }
+  }
+}
+```
+In the above example, the two hero fields would have conflicted, but since we can alias them to different names, we can get both results in one request.
+
+### Fragments
+GraphQL includes reuseable units called fragments. Fragments let you construct sets of fields, and then include them in queries where you need to. 
+```json
+{
+  leftComparison: hero(episode: EMPIRE) {
+    ...comparisonFields
+  }
+  rightComparison: hero(episode: JEDI) {
+    ...comparisonFields
+  }
+}
+
+fragment comparisonFields on Character {
+  name
+  appearsIn
+  friends {
+    name
+  }
+}
+```
+The concept of fragments is frequently used to split complicated application data requirements into smaller chunks, especially when you need to combine lots of UI components with different fragments into one initial data fetch.
+
 ## Working with GraphQL
 
 #### [graphiql](https://www.electronjs.org/apps/graphiql)
 
 #### [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
-```
