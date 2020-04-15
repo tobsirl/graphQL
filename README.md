@@ -28,4 +28,6 @@ On the backend, GraphQL specifies to the API how to present the data to the clie
 }
 ```
 
-## [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
+## Working with GraphQL
+#### [graphiql](https://www.electronjs.org/apps/graphiql)
+#### [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
