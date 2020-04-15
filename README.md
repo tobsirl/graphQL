@@ -7,27 +7,61 @@ On the backend, GraphQL specifies to the API how to present the data to the clie
 
 ### GraphQL Operation: Query
 
-#### request
+### Fields
+
+GraphQL is about asking for specific fields on objects.
+`Field` name returns a `Type` of `String`
+
 ```json
+# request
 {
   viewer {
     name
     url
   }
 }
-```
-#### response
-```json
+
+# response
 {
-    "data": {
-        "viewer": {
-            "name": "Paul Tobin",
-            "url": "https://github.com/tobsirl"
-        }
+  "data": {
+    "viewer": {
+      "name": "Paul Tobin",
+      "url": "https://github.com/tobsirl"
     }
+  }
+}
+```
+
+
+
+### Arguments
+
+Passing arguments allows us to specify the data we require.
+Every field and nested object can get its own set of arguements, making GraphQL a complete replacement for making multiple API fetches.
+
+```json
+# request
+{
+  human(id: "1000") {  
+    name
+    height
+  }
+}
+
+# response
+{
+  "data": {
+    "human": {
+      "name": "Luke Skywalker",
+      "height": 1.72
+    }
+  }
 }
 ```
 
 ## Working with GraphQL
+
 #### [graphiql](https://www.electronjs.org/apps/graphiql)
+
 #### [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
+```
