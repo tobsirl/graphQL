@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 
@@ -9,13 +9,29 @@ const axiosGitHubGraphQL = axios.create({
   },
 });
 
-function App() {
-  const title = `React GraphQL Github Client`;
-  return (
-    <div className="App">
-      <h1>{title}</h1>
-    </div>
-  );
+const TITLE = 'React GraphQL GitHub Client';
+
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <h1>{TITLE}</h1>
+        <form onSubmit={this.onSubmit}>
+          <label htmlFor="url">Show open issues for https://github.com/</label>
+          <input
+            id="url"
+            type="text"
+            onChange={this.onChange}
+            style={{ width: '300px' }}
+          />
+          <button type="submit">Search</button>
+        </form>
+        <hr />
+        {/* Here comes the result! */}
+      </div>
+    );
+  }
 }
 
 export default App;
