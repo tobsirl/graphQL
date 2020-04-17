@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import Organization from './components/Organization';
 
 const axiosGitHubGraphQL = axios.create({
   baseURL: `https://api.github.com/graphql`,
@@ -51,7 +52,7 @@ class App extends Component {
   };
 
   render() {
-    const { path } = this.state;
+    const { path, organization, errors } = this.state;
     return (
       <div>
         <h1>{TITLE}</h1>
@@ -67,7 +68,11 @@ class App extends Component {
           <button type="submit">Search</button>
         </form>
         <hr />
-        {/* Here comes the result! */}
+        {organization ? (
+          <Organization organization={organization} errors={errors} />
+        ) : (
+          <p>No information yet ...</p>
+        )}
       </div>
     );
   }
