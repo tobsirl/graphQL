@@ -1,23 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import axios from 'axios';
 import Organization from './components/Organization';
 
-const axiosGitHubGraphQL = axios.create({
-  baseURL: `https://api.github.com/graphql`,
-  headers: {
-    Authorization: `bearer ${process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN}`,
-  },
-});
-
-const GET_ORGANIZATION = `
-  {
-    organization(login: "the-road-to-learn-react") {
-      name
-      url
-    }
-  }
-`;
+import { GET_ORGANIZATION } from './graphQL/graphQL';
+import { axiosGitHubGraphQL } from './utils/http';
 
 const TITLE = 'React GraphQL GitHub Client';
 
@@ -31,10 +17,6 @@ const App = () => {
   useEffect(() => {
     onFetchFromGitHub();
   }, []);
-
-  const onChange = (event) => {
-    setPath(event.target.value);
-  };
 
   const onSubmit = (event) => {
     // fetch data
@@ -57,7 +39,7 @@ const App = () => {
           id="url"
           type="text"
           value={path}
-          onChange={onChange}
+          onChange={(event) => setPath(event.target.value)}
           style={{ width: '300px' }}
         />
         <button type="submit">Search</button>
