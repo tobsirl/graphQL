@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Organization from './components/Organization';
 
-import { GET_ORGANIZATION } from './graphQL/graphQL';
+import { GET_REPOSITORY_OF_ORGANIZATION } from './graphQL/graphQL';
 import { axiosGitHubGraphQL } from './utils/http';
 
 const TITLE = 'React GraphQL GitHub Client';
@@ -24,10 +24,12 @@ const App = () => {
   };
 
   const onFetchFromGitHub = () => {
-    axiosGitHubGraphQL.post('', { query: GET_ORGANIZATION }).then((result) => {
-      setOrganization(result.data.data.organization);
-      setErrors(result.data.errors);
-    });
+    axiosGitHubGraphQL
+      .post('', { query: GET_REPOSITORY_OF_ORGANIZATION })
+      .then((result) => {
+        setOrganization(result.data.data.organization);
+        setErrors(result.data.errors);
+      });
   };
 
   return (

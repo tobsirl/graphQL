@@ -1,4 +1,5 @@
 import React from 'react';
+import Repository from './Repository';
 
 const Organization = ({ organization, errors }) => {
   const { url, name } = organization;
@@ -14,9 +15,10 @@ const Organization = ({ organization, errors }) => {
   return (
     <div>
       <p>
-        <strong>Issues from Organization:</strong>
+        <strong>Issues from Organization: </strong>
         <a href={url}>{name}</a>
       </p>
+      <Repository repository={organization.repository} />
     </div>
   );
 };
