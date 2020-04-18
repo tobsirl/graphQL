@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Organization from './components/Organization';
 
-import { GET_REPOSITORY_OF_ORGANIZATION } from './graphQL/graphQL';
+import { GET_ISSUES_OF_REPOSITORY } from './graphQL/graphQL';
 import { axiosGitHubGraphQL } from './utils/http';
 
 const TITLE = 'React GraphQL GitHub Client';
@@ -25,7 +25,7 @@ const App = () => {
 
   const onFetchFromGitHub = () => {
     axiosGitHubGraphQL
-      .post('', { query: GET_REPOSITORY_OF_ORGANIZATION })
+      .post('', { query: GET_ISSUES_OF_REPOSITORY })
       .then((result) => {
         setOrganization(result.data.data.organization);
         setErrors(result.data.errors);
@@ -33,7 +33,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="App">
       <h1>{TITLE}</h1>
       <form onSubmit={onSubmit}>
         <label htmlFor="url">Show open issues for https://github.com/</label>
