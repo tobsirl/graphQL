@@ -7,12 +7,62 @@ import { axiosGitHubGraphQL } from './utils/http';
 
 const TITLE = 'React GraphQL GitHub Client';
 
+const query = `
+{
+  organization(login: "the-road-to-learn-react") {
+    name
+    url
+    repository(name: "the-road-to-learn-react") {
+      name
+      url
+      issues(last: 15) {
+        edges {
+          node {
+            id
+            title
+            url
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
 const App = () => {
   const [path, setPath] = useState(
     'the-road-to-learn-react/the-road-to-learn-react'
   );
   const [organization, setOrganization] = useState(null);
   const [errors, setErrors] = useState(null);
+
+  const opts = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `bearer ${process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify({ query }),
+  };
+
+  const onFetchFromGitHub = async () => {
+    // axiosGitHubGraphQL
+    //   .post('', { query: GET_ISSUES_OF_REPOSITORY })
+    //   .then((result) => {
+    //     setOrganization(result.data.data.organization);
+    //     setErrors(result.data.errors);
+    //   });
+    const response = await fetch(`https://api.github.com/graphql`, opts)
+    const result = await response.json();
+    setOrganization(result.data.organization)
+    
+      // .then((res) => res.json())
+      // .then((result) => {
+      //   setOrganization(result.data.organization)
+      //   // setErrors(result.data.errors)
+      
+      // });
+  };
 
   useEffect(() => {
     onFetchFromGitHub();
@@ -21,15 +71,6 @@ const App = () => {
   const onSubmit = (event) => {
     // fetch data
     event.preventDefault();
-  };
-
-  const onFetchFromGitHub = () => {
-    axiosGitHubGraphQL
-      .post('', { query: GET_ISSUES_OF_REPOSITORY })
-      .then((result) => {
-        setOrganization(result.data.data.organization);
-        setErrors(result.data.errors);
-      });
   };
 
   return (
