@@ -200,6 +200,14 @@ The Apollo libary offers an abstraction that makes using GraphQL in React much e
 * How GraphQL works when using a puristic interface such as HTTP.
 * The shortcomings of using no sophisticated GraphQL Client libary in React, having to do everything yourself.
 
+Reasons for using a library like Apollo: 
+* **Complementary:** Using a HTTP client library like fetch or axios doesn't feel like the best fit to complement a GraphQL centred interface. GraphQL doesn't use the full potential of HTTP. GraphQL only uses the POST method and one API endpoint. It makes no sense to specify a HTTP method and an API endpoint with every request, but to set it up once in the beginning instead.
+  
+
+* **Declarative:** Every time you make a query or mutation using plain HTTP requests, you have to make a dedicated call to the API endpoint. This is an imperative way of reading and writing data to your backend. Apollo gives us a declarative approach, we can co-locate queries and mutations to our view-layer components.
+* **Feature Support:** When using plain HTTP requests to interact with your GraphQL API, you are not leveraging the full potential of GraphQL. Imagine you want to split your query from the previous application into multiple queries that are co-located with their respective components where the data is used. That's when GraphQL would be used in a declarative way in your view-layer. But when you have no library support, you have to deal with multiple queries on your own, keeping track of all of them, and trying to merge the results in your state-layer. If you consider the previous application, splitting up the query into multiple queries would add a whole layer of complexity to the application. A GraphQL client library deals with aggregating the queries for you.
+* **Data Handling:** The naive way for data handling with puristic HTTP requests is a subcategory of the missing feature support for GraphQL when not using a dedicated library for it. There is no one helping you out with normalizing your data and caching it for identical requests. Updating your state-layer when resolving fetched data from the data-layer becomes a nightmare when not normalizing the data in the first place. You have to deal with deeply nested state objects which lead to the verbose usage of the JavaScript spread operator. 
+* **GraphQL Subscriptions:** While there is the concept of a query and mutation to read and write data with GraphQL, there is a third concept of a GraphQL subscription for receiving real-time data in a client-sided application. When you would have to rely on plain HTTP requests as before, you would have to introduce WebSockets next to it. It enables you to introduce a long-lived connection for receiving results over time.
 ****
 
 ## Working with GraphQL
