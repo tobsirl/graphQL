@@ -193,7 +193,14 @@ A mutation can contain multiple fields, just like a query. There's one important
 
 **While query fields are executed in parallel, mutation fields run in series, one after the other.**
 
-*****
+****
+
+## Shortcomings of GraphQL in React without Apollo
+The Apollo libary offers an abstraction that makes using GraphQL in React much easier. Using GraphQL without a supporting framework has shown us: 
+* How GraphQL works when using a puristic interface such as HTTP.
+* The shortcomings of using no sophisticated GraphQL Client libary in React, having to do everything yourself.
+
+****
 
 ## Working with GraphQL
 
