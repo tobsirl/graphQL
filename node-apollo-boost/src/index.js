@@ -3,8 +3,8 @@ import 'cross-fetch/polyfill';
 import ApolloClient, { gql } from 'apollo-boost';
 
 const GET_ORGANIZATION = gql`
-  {
-    organization(login: "the-road-to-learn-react") {
+  query($organization: String!) {
+    organization(login: $organization) {
       name
       url
     }
@@ -25,6 +25,9 @@ const client = new ApolloClient({
 client
   .query({
     query: GET_ORGANIZATION,
+    variables: {
+      organization: 'the-road-to-learn-react',
+    },
   })
   .then(console.log);
 
