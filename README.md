@@ -31,7 +31,8 @@ GraphQL is about asking for specific fields on objects.
   }
 }
 ```
-****
+
+---
 
 ### Arguments
 
@@ -57,7 +58,8 @@ Every field and nested object can get its own set of arguements, making GraphQL 
   }
 }
 ```
-****
+
+---
 
 ### Aliases
 
@@ -88,7 +90,8 @@ Aliases allow you to rename the result of a field
 ```
 
 In the above example, the two hero fields would have conflicted, but since we can alias them to different names, we can get both results in one request.
-****
+
+---
 
 ### Fragments
 
@@ -114,7 +117,8 @@ fragment comparisonFields on Character {
 ```
 
 The concept of fragments is frequently used to split complicated application data requirements into smaller chunks, especially when you need to combine lots of UI components with different fragments into one initial data fetch.
-****
+
+---
 
 ### Operation name
 
@@ -133,7 +137,8 @@ query HeroNameAndFriends {
 
 The _operation type_ is either _query_, _mutation_, or _subscription_ and describes what type of operation you're intending to do.
 Using the _operation name_ is encouraged because it is very helpful when it comes to debugging and server-side logging.
-****
+
+---
 
 ### Variables
 
@@ -160,7 +165,9 @@ query HeroNameAndFriends($episode: Episode) {
 ```
 
 In the client code we can pass a different variable rather than needing to construct an entirely new query.
-****
+
+---
+
 ### Directives
 
 A directive can be attached to a field or fragment inclusion, and can affect execution of the query in any way the server desires.
@@ -168,7 +175,8 @@ A directive can be attached to a field or fragment inclusion, and can affect exe
 - @include(if: Boolean) Only include this field in the result if the argument is true.
 - @skip(if: Boolean) Skip this field if the argument is true.
 
-****
+---
+
 ### Mutations
 
 While most dicussion about GraphQL is centered around data fetching, any complete data platform needs a way to modify server-side data as well.
@@ -189,30 +197,68 @@ mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) {
   }
 }
 ```
+
 A mutation can contain multiple fields, just like a query. There's one important distinction between queries and mutations, other than the name:
 
 **While query fields are executed in parallel, mutation fields run in series, one after the other.**
 
-****
+---
 
 ## Shortcomings of GraphQL in React without Apollo
-The Apollo libary offers an abstraction that makes using GraphQL in React much easier. Using GraphQL without a supporting framework has shown us: 
-* How GraphQL works when using a puristic interface such as HTTP.
-* The shortcomings of using no sophisticated GraphQL Client libary in React, having to do everything yourself.
 
-Reasons for using a library like Apollo: 
-* **Complementary:** Using a HTTP client library like fetch or axios doesn't feel like the best fit to complement a GraphQL centred interface. GraphQL doesn't use the full potential of HTTP. GraphQL only uses the POST method and one API endpoint. It makes no sense to specify a HTTP method and an API endpoint with every request, but to set it up once in the beginning instead.
-  
+The Apollo libary offers an abstraction that makes using GraphQL in React much easier. Using GraphQL without a supporting framework has shown us:
+
+- How GraphQL works when using a puristic interface such as HTTP.
+- The shortcomings of using no sophisticated GraphQL Client libary in React, having to do everything yourself.
+
+Reasons for using a library like Apollo:
+
+- **Complementary:** Using a HTTP client library like fetch or axios doesn't feel like the best fit to complement a GraphQL centred interface. GraphQL doesn't use the full potential of HTTP. GraphQL only uses the POST method and one API endpoint. It makes no sense to specify a HTTP method and an API endpoint with every request, but to set it up once in the beginning instead.
 
 * **Declarative:** Every time you make a query or mutation using plain HTTP requests, you have to make a dedicated call to the API endpoint. This is an imperative way of reading and writing data to your backend. Apollo gives us a declarative approach, we can co-locate queries and mutations to our view-layer components.
 * **Feature Support:** When using plain HTTP requests to interact with your GraphQL API, you are not leveraging the full potential of GraphQL. Imagine you want to split your query from the previous application into multiple queries that are co-located with their respective components where the data is used. That's when GraphQL would be used in a declarative way in your view-layer. But when you have no library support, you have to deal with multiple queries on your own, keeping track of all of them, and trying to merge the results in your state-layer. If you consider the previous application, splitting up the query into multiple queries would add a whole layer of complexity to the application. A GraphQL client library deals with aggregating the queries for you.
-* **Data Handling:** The naive way for data handling with puristic HTTP requests is a subcategory of the missing feature support for GraphQL when not using a dedicated library for it. There is no one helping you out with normalizing your data and caching it for identical requests. Updating your state-layer when resolving fetched data from the data-layer becomes a nightmare when not normalizing the data in the first place. You have to deal with deeply nested state objects which lead to the verbose usage of the JavaScript spread operator. 
+* **Data Handling:** The naive way for data handling with puristic HTTP requests is a subcategory of the missing feature support for GraphQL when not using a dedicated library for it. There is no one helping you out with normalizing your data and caching it for identical requests. Updating your state-layer when resolving fetched data from the data-layer becomes a nightmare when not normalizing the data in the first place. You have to deal with deeply nested state objects which lead to the verbose usage of the JavaScript spread operator.
 * **GraphQL Subscriptions:** While there is the concept of a query and mutation to read and write data with GraphQL, there is a third concept of a GraphQL subscription for receiving real-time data in a client-sided application. When you would have to rely on plain HTTP requests as before, you would have to introduce WebSockets next to it. It enables you to introduce a long-lived connection for receiving results over time.
-****
+
+---
+
+## [GraphQL Yoga](https://github.com/prisma-labs/graphql-yoga)
+
+Type Definitions (Schema) - describes the operations that can be performed, the custom data types
+
+Resolvers - set of functions that run for each of the operations
+
+```js
+import { GraphQLServer } from 'graphql-yoga';
+
+// Type definitions (Schema)
+const typeDefs = `
+  type Query {
+    hello: String!
+  }
+`;
+
+// Resolvers
+const resolvers = {
+  Query: {
+    hello() {
+      return 'This is my first query!';
+    },
+  },
+};
+
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+});
+
+server.start(() => console.log(`The server is up`));
+```
+
+---
 
 ## Working with GraphQL
 
 #### [graphiql](https://www.electronjs.org/apps/graphiql)
 
 #### [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
-

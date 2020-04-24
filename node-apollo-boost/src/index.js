@@ -2,12 +2,31 @@ import 'dotenv/config';
 import 'cross-fetch/polyfill';
 import ApolloClient, { gql } from 'apollo-boost';
 
-const GET_ORGANIZATION = gql`
-  query($organization: String!) {
+const GET_REPOSITORIES_OF_ORGANIZATION = gql`
+  query($organization: String!, $cursor: String) {
     organization(login: $organization) {
       name
       url
+      repositories(
+        first: 5
+        orderBy: { direction: DESC, field: STARGAZERS }
+        after: $cursor
+      ) {
+        edges {
+          node {
+            ...repository
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
     }
+  }
+  fragment repository on Repository {
+    name
+    url
   }
 `;
 
@@ -24,21 +43,9 @@ const client = new ApolloClient({
 
 client
   .query({
-    query: GET_ORGANIZATION,
+    query: GET_REPOSITORIES_OF_ORGANIZATION,
     variables: {
       organization: 'the-road-to-learn-react',
     },
   })
   .then(console.log);
-
-const userCredentials = { firstname: 'Robin' };
-const userDetails = { nationality: 'German' };
-
-const user = {
-  ...userCredentials,
-  ...userDetails,
-};
-
-// console.log(user);
-
-// console.log(process.env.SOME_ENV_VARIABLE);
