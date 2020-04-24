@@ -277,6 +277,32 @@ type Query {
   }
 ```
 
+### Custom Types
+
+```js
+ type Query {
+    post: Post!
+  }
+
+// Custom Type
+type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+  }
+  
+// Resovler 
+post() {
+    return {
+      id: '123abc',
+      title: 'GraphQL is great',
+      body: 'Having fun learning GraphQL',
+      published: true,
+    };
+  },
+```
+
 ---
 
 ## Working with GraphQL
