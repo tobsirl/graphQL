@@ -1,8 +1,36 @@
-import country, { message } from './myModule';
-import add, { subtract } from './math';
+import { GraphQLServer } from 'graphql-yoga';
 
-console.log(message);
+// Type definitions (Schema)
+const typeDefs = `
+  type Query {
+    hello: String!
+    name: String!
+    location: String!
+    bio: String!
+  }
+`;
 
-console.log(country);
+// Resolvers
+const resolvers = {
+  Query: {
+    hello() {
+      return 'This is my first query!';
+    },
+    name() {
+      return 'Paul Tobin';
+    },
+    location() {
+      return 'Ireland';
+    },
+    bio() {
+      return `Software Developer`;
+    },
+  },
+};
 
-console.log(`Add: ${add(5, 5)} Subtract: ${subtract(10, 5)}`);
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+});
+
+server.start(() => console.log(`The server is up`));
