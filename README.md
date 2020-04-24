@@ -255,6 +255,28 @@ const server = new GraphQLServer({
 server.start(() => console.log(`The server is up`));
 ```
 
+### Scalar Types
+
+A scalar value is a single discrete value. A scalar type is a type that stores a single value. There are five built-in scalar types in GraphQL.
+
+1. **ID** - Used to store unique identifier.
+2. **String** - Used to store string data as UTF-8 characters.
+3. **Boolean** - Used to store true or false.
+4. **Int** - Used to store 32-bit integer numbers.
+5. **Float** - Used to store double-precision floating-point numbers.
+
+Non-scalar value are **Arrays** and **Objects** which are a collection of values as opposed to a single discrete value.
+
+```js
+type Query {
+    id: ID!
+    name: String!
+    age: Int!
+    employed: Boolean!
+    gpa: Float
+  }
+```
+
 ---
 
 ## Working with GraphQL
