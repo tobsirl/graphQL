@@ -5,6 +5,7 @@ import { GraphQLServer } from 'graphql-yoga';
 // Type definitions (Schema)
 const typeDefs = `
   type Query {
+    greeting(name: String): String!
     me: User!
     post: Post!
   }
@@ -27,6 +28,9 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
   Query: {
+    greeting(parent, { name }, ctx, info) {
+      return `Welcome to GraphQL ${name}`;
+    },
     me() {
       return {
         id: 'abc123',

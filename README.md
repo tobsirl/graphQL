@@ -302,7 +302,17 @@ post() {
     };
   },
 ```
-
+### Operation Arguments
+```js
+  type Query {
+    greeting(name: String): String!
+  }
+  
+  // Resolver
+  greeting(parent, { name }, ctx, info) {
+      return `Welcome to GraphQL ${name}`;
+    },
+```
 ---
 
 ## Working with GraphQL
