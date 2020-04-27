@@ -27,17 +27,20 @@ export const posts = [
     title: 'Post number 1 monkey',
     body: 'Contains of post number 1',
     published: true,
+    author: '1',
   },
   {
     id: '2',
     title: 'Post number 2',
     body: 'Contains of post number 2, monkey',
     published: false,
+    author: '1',
   },
   {
     id: '3',
     title: 'Post number 3',
     body: 'Contains of post number 3',
     published: true,
+    author: '2',
   },
 ];

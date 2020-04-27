@@ -24,6 +24,7 @@ const typeDefs = `
     title: String!
     body: String!
     published: Boolean!
+    author: User!
   }
 `;
 
@@ -65,6 +66,13 @@ const resolvers = {
         body: 'Having fun learning GraphQL',
         published: true,
       };
+    },
+  },
+  Post: {
+    author(parent, args, ctx, info) {
+      return users.find((user) => {
+        return user.id === parent.author;
+      });
     },
   },
 };
