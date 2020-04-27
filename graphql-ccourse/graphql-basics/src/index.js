@@ -1,5 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
-import { users, posts } from './data';
+import { users, posts, comments } from './data';
 
 // Scalar types = String, Boolean, Integer, Float, ID
 
@@ -8,6 +8,7 @@ const typeDefs = `
   type Query {
     users(query: String): [User!]!
     posts(query: String): [Post!]!
+    comments: [Comment!]!
     me: User!
     post: Post!
   }
@@ -26,6 +27,11 @@ const typeDefs = `
     body: String!
     published: Boolean!
     author: User!
+  }
+
+  type Comment {
+    id: ID!
+    text: String!
   }
 `;
 
@@ -51,6 +57,9 @@ const resolvers = {
           post.body.toLocaleLowerCase().includes(args.query.toLocaleLowerCase())
         );
       });
+    },
+    comments(parent, args, ctx, info) {
+      if (!args.query) return comments;
     },
     me() {
       return {
