@@ -51,20 +51,24 @@ export const comments = [
     id: '111',
     text: 'This is the first comment 1',
     author: '1',
+    post: '10',
   },
   {
     id: '112',
     text: 'This is the first comment 2',
     author: '1',
+    post: '20',
   },
   {
     id: '113',
     text: 'This is the first comment 3',
     author: '2',
+    post: '30',
   },
   {
     id: '114',
     text: 'This is the first comment 4',
     author: '3',
+    post: '30',
   },
 ];
