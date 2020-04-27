@@ -45,22 +45,26 @@ export const posts = [
   },
 ];
 
-// Demo comment type
+// Demo comments type
 export const comments = [
   {
     id: '111',
     text: 'This is the first comment 1',
+    author: '1',
   },
   {
     id: '112',
     text: 'This is the first comment 2',
+    author: '1',
   },
   {
     id: '113',
     text: 'This is the first comment 3',
+    author: '2',
   },
   {
     id: '114',
     text: 'This is the first comment 4',
+    author: '3',
   },
 ];
