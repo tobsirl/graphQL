@@ -313,6 +313,21 @@ post() {
       return `Welcome to GraphQL ${name}`;
     },
 ```
+### Working with Arrays
+```js
+type Query {
+    users(query: String): [User!]!
+  }
+
+  users(parent, args, ctx, info) {
+      if (!args.query) {
+        return users;
+      }
+      return users.filter((user) =>
+        user.name.toLocaleLowerCase().includes(args.query.toLocaleLowerCase())
+      );
+    },
+```
 ---
 
 ## Working with GraphQL
