@@ -2,14 +2,30 @@ const { GraphQLServer } = require('graphql-yoga');
 
 const typeDefs = `
   type Query {
-    hello: String!
+    id: ID!
+    name: String!
+    age: Int!
+    rating: Float!
+    alive: Boolean!
   }
 `;
 
 const resolvers = {
   Query: {
-    hello() {
-      return `This is a test string`;
+    id() {
+      return `123abc`;
+    },
+    name() {
+      return `Thomas`;
+    },
+    age() {
+      return 23;
+    },
+    rating() {
+      return 4.5;
+    },
+    alive() {
+      return true;
     },
   },
 };
