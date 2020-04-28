@@ -1,31 +1,31 @@
-const { GraphQLServer } = require('graphql-yoga');
+import { GraphQLServer } from 'graphql-yoga';
+import { customers, products } from './data';
 
 const typeDefs = `
   type Query {
+    customers(query: String): [Customer!]!
+  }
+
+  type Customer {
     id: ID!
     name: String!
     age: Int!
-    rating: Float!
-    alive: Boolean!
+    loyalityCard: Boolean!
+  }
+
+  type Product {
+    id: ID!
+    name: String!
   }
 `;
 
 const resolvers = {
   Query: {
-    id() {
-      return `123abc`;
-    },
-    name() {
-      return `Thomas`;
-    },
-    age() {
-      return 23;
-    },
-    rating() {
-      return 4.5;
-    },
-    alive() {
-      return true;
+    customers(parent, args, ctx, info) {
+      if (!args.query) return customers;
+      return customers.filter((customer) =>
+        customer.name.toLowerCase().includes(args.query.toLowerCase())
+      );
     },
   },
 };
