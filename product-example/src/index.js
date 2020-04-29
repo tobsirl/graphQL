@@ -38,7 +38,13 @@ const resolvers = {
   },
   Product: {
     customer(parent, args, ctx, info) {
-     return customers.find((customer) => parent.customer === customer.id)
+      return customers.find((customer) => parent.customer === customer.id);
+    },
+  },
+  Customer: {
+    products(parent, args, ctx, info) {
+      console.log(parent.id);
+      return products.filter((product) => parent.id === product.customer);
     },
   },
 };
