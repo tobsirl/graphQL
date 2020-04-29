@@ -4,7 +4,7 @@ import { customers, products } from './data';
 const typeDefs = `
   type Query {
     customers(query: String): [Customer!]!
-    products(inStock: Boolean): [Product!]!
+    products: [Product!]!
   }
 
   type Customer {
@@ -12,6 +12,7 @@ const typeDefs = `
     name: String!
     age: Int!
     loyalityCard: Boolean!
+    products: [Product!]!
   }
 
   type Product {
@@ -19,6 +20,7 @@ const typeDefs = `
     name: String!
     price: Float!
     inStock: Boolean!
+    customer: Customer!
   }
 `;
 
@@ -31,8 +33,12 @@ const resolvers = {
       );
     },
     products(parent, args, ctx, info) {
-      if (!args.inStock) return customers;
-      return products.filter((product) => product.inStock === args.inStock)
+      return products;
+    },
+  },
+  Product: {
+    customer(parent, args, ctx, info) {
+     return customers.find((customer) => parent.customer === customer.id)
     },
   },
 };
