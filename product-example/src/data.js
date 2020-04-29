@@ -49,3 +49,48 @@ export const products = [
     customer: '002',
   },
 ];
+
+export const reviews = [
+  {
+    id: '201',
+    title: 'Best purchase',
+    body: 'This is the body of the text',
+    customer: '001',
+  },
+  {
+    id: '202',
+    title: 'Terrible product',
+    body: 'Item never worked',
+    customer: '001',
+  },
+  {
+    id: '203',
+    title: 'Book was very boring',
+    body: `Couldn't get pass the first chapter`,
+    customer: '002',
+  },
+  {
+    id: '204',
+    title: 'Great Product',
+    body: 'New version is the best yet',
+    customer: '002',
+  },
+  {
+    id: '205',
+    title: 'Got this dress in black',
+    body: 'Finally got this in the color I want',
+    customer: '002',
+  },
+  {
+    id: '206',
+    title: 'Best mouse',
+    body: 'Bit on the expensive side',
+    customer: '003',
+  },
+  {
+    id: '207',
+    title: 'Would buy again',
+    body: 'Wish the ice-cream lasted longer',
+    customer: '003',
+  },
+];

@@ -1,10 +1,11 @@
 import { GraphQLServer } from 'graphql-yoga';
-import { customers, products } from './data';
+import { customers, products, reviews } from './data';
 
 const typeDefs = `
   type Query {
     customers(query: String): [Customer!]!
     products: [Product!]!
+    reviews: [Review!]!
   }
 
   type Customer {
@@ -22,6 +23,13 @@ const typeDefs = `
     inStock: Boolean!
     customer: Customer!
   }
+
+  type Review {
+    id: ID!
+    title: String!
+    body: String!
+    customer: Customer!
+  }
 `;
 
 const resolvers = {
@@ -35,6 +43,9 @@ const resolvers = {
     products(parent, args, ctx, info) {
       return products;
     },
+    reviews() {
+      return reviews;
+    },
   },
   Product: {
     customer(parent, args, ctx, info) {
@@ -43,8 +54,12 @@ const resolvers = {
   },
   Customer: {
     products(parent, args, ctx, info) {
-      console.log(parent.id);
       return products.filter((product) => parent.id === product.customer);
+    },
+  },
+  Review: {
+    customer(parent, args, ctx, info) {
+      return customers.find((customer) => parent.customer === customer.id);
     },
   },
 };
