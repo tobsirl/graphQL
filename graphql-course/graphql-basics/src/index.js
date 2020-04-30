@@ -1,5 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { users, posts, comments } from './data';
+import { v4 as uuidv4 } from 'uuid';
 
 // Scalar types = String, Boolean, Integer, Float, ID
 
@@ -11,6 +12,10 @@ const typeDefs = `
     comments: [Comment!]!
     me: User!
     post: Post!
+  }
+
+  type Mutation {
+    createUser(name: String!, email: String!, age: Int): User!
   }
 
   type User {
@@ -80,6 +85,30 @@ const resolvers = {
         body: 'Having fun learning GraphQL',
         published: true,
       };
+    },
+  },
+  Mutation: {
+    createUser(parent, args, ctx, info) {
+      // check if the email is already taken
+      const emailTaken = users.some((user) => user.email === args.email);
+
+      // throw an error if the email is taken
+      if (emailTaken) {
+        throw new Error(`Email taken ${args.email}`);
+      }
+
+      // create the user
+      const user = {
+        id: uuidv4(),
+        name: args.name,
+        email: args.email,
+        age: args.age,
+      };
+
+      // save the user
+      users.concat(user);
+
+      return user;
     },
   },
   Post: {
