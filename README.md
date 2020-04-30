@@ -329,7 +329,7 @@ type Query {
     },
 ```
 ### Relational Data
-Setting up relationships between object types allows you to query based on those relationships, this is on of the best features for GraphQL
+Setting up relationships between object types allows you to query based on those relationships, this is on of the best features for GraphQL.
 ```js 
 type User {
     id: ID!
@@ -350,6 +350,32 @@ Post: {
     author(parent, args, ctx, info) {
       return users.find((user) => {
         return user.id === parent.author;
+      });
+    },
+}
+```
+### Relational Data: Arrays
+```js
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
+    posts: [Post!]!
+}
+// Association between user and posts
+type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+    author: User!
+}
+// Using filter to find the users posts
+User: {
+    posts(parent, args, ctx, info) {
+      return posts.filter((post) => {
+        return post.author === parent.id;
       });
     },
 }
