@@ -5,7 +5,7 @@ const typeDefs = `
   type Query {
     customers(query: String): [Customer!]!
     products: [Product!]!
-    reviews: [Review!]!
+    reviews(title: String, body: String): [Review!]!
   }
 
   type Customer {
@@ -14,6 +14,7 @@ const typeDefs = `
     age: Int!
     loyalityCard: Boolean!
     products: [Product!]!
+    reviews: [Review!]!
   }
 
   type Product {
@@ -43,8 +44,16 @@ const resolvers = {
     products(parent, args, ctx, info) {
       return products;
     },
-    reviews() {
-      return reviews;
+    reviews(parent, { title, body }, ctx, info) {
+      if (!title && !body) return reviews;
+      const matchTitle = reviews.filter((review) =>
+        review.title.toLowerCase().includes(title.toLowerCase())
+      );
+      const matchBody = reviews.filter((review) =>
+        review.body.toLowerCase().includes(body.toLowerCase())
+      );
+
+      return matchTitle || matchBody;
     },
   },
   Product: {
@@ -55,6 +64,9 @@ const resolvers = {
   Customer: {
     products(parent, args, ctx, info) {
       return products.filter((product) => parent.id === product.customer);
+    },
+    reviews(parent, args, ctx, info) {
+      return reviews.filter((review) => parent.id === review.customer);
     },
   },
   Review: {

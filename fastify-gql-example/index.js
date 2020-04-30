@@ -6,17 +6,26 @@ const app = fastify();
 
 const typeDefs = `
   type Query {
-    hello: String!
     post: Post!
   }
 
-  type Post 
+  type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+  }
 `;
 
 const resolvers = {
   Query: {
-    hello() {
-      return 'Hello';
+    post() {
+      return {
+        id: '123abc',
+        title: 'GraphQL is great',
+        body: 'Having fun learning GraphQL',
+        published: true,
+      };
     },
   },
 };
@@ -26,7 +35,7 @@ app.register(gql, {
 });
 
 app.get('/', (req, reply) => {
-  const query = '{ hello }';
+  const query = '{ post }';
   return reply.graphql(query);
 });
 
