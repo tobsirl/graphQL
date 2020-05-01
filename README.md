@@ -381,6 +381,41 @@ User: {
 }
 ```
 ---
+### Mutations
+Mutations, like queries, must be defined in your application schema. Defining a mutation is similar to defining a query. 
+The major difference is that queries are defined on the `Query` type while mutations are defined on the `Mutation` type.
+
+Resolver methods for mutations live on the `Mutation` property of the `resolover` object
+```js
+type Mutation {
+    createUser(name: String!, email: String!, age: Int): User!
+}
+
+ Mutation: {
+    createUser(parent, args, ctx, info) {
+      // check if the email is already taken
+      const emailTaken = users.some((user) => user.email === args.email);
+
+      // throw an error if the email is taken
+      if (emailTaken) {
+        throw new Error(`Email taken ${args.email}`);
+      }
+
+      // create the user
+      const user = {
+        id: uuidv4(),
+        name: args.name,
+        email: args.email,
+        age: args.age,
+      };
+
+      // save the user
+      users.push(user);
+
+      return user;
+    },
+}
+```
 
 ## Working with GraphQL
 
