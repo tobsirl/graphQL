@@ -102,9 +102,7 @@ const resolvers = {
       // create the user
       const user = {
         id: uuidv4(),
-        name: args.name,
-        email: args.email,
-        age: args.age,
+        ...args,
       };
 
       // save the user
@@ -136,7 +134,7 @@ const resolvers = {
       const postExists = posts.some(
         (post) => post.id === args.post && post.published === true
       );
-      
+
       if (!userExists || !postExists) throw new Error(`User not found`);
 
       const comment = {
