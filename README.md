@@ -380,7 +380,7 @@ User: {
     },
 }
 ```
----
+
 ### Mutations
 Mutations, like queries, must be defined in your application schema. Defining a mutation is similar to defining a query. 
 The major difference is that queries are defined on the `Query` type while mutations are defined on the `Mutation` type.
@@ -416,6 +416,21 @@ type Mutation {
     },
 }
 ```
+### Input Type
+
+The input type allows you to set up arguments as objects, given you more control over how your operations functions.
+```js
+type Mutation {
+    createUser(user: CreateUserInput!): User!
+  }
+
+input CreateUserInput {
+    name: String!
+    email: String!
+    age: Int!
+  }
+```
+---
 
 ## Working with GraphQL
 
