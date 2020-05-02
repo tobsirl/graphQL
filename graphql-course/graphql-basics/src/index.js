@@ -2,72 +2,6 @@ import { GraphQLServer } from 'graphql-yoga';
 import { users, posts, comments } from './data';
 import { v4 as uuidv4 } from 'uuid';
 
-// Scalar types = String, Boolean, Integer, Float, ID
-
-// Type definitions (Schema)
-const typeDefs = `
-  type Query {
-    users(query: String): [User!]!
-    posts(query: String): [Post!]!
-    comments: [Comment!]!
-    me: User!
-    post: Post!
-  }
-
-  type Mutation {
-    createUser(user: CreateUserInput!): User!
-    deleteUser(id: ID!): User!
-    createPost(post: CreatePostInput!): Post!
-    deletePost(id: ID!): Post!
-    createComment(comment: CreateCommentInput!): Comment!
-    deleteComment(id: ID!): Comment!
-  }
-
-  input CreateUserInput {
-    name: String!
-    email: String!
-    age: Int!
-  }
-
-  input CreatePostInput {
-    title: String!
-    body: String!
-    published: Boolean!
-    author: ID!
-  }
-
-  input CreateCommentInput {
-    text: String!
-    author: ID!
-    post: ID!
-  }
-
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-    age: Int
-    posts: [Post!]!
-    comments: [Comment!]!
-  }
-
-  type Post {
-    id: ID!
-    title: String!
-    body: String!
-    published: Boolean!
-    author: User!
-    comments: [Comment!]!
-  }
-
-  type Comment {
-    id: ID!
-    text: String!
-    author: User!
-    post: Post!
-  }
-`;
-
 // Resolvers
 const resolvers = {
   Query: {
@@ -204,7 +138,7 @@ const resolvers = {
       const commentIndex = comments.findIndex(
         (comment) => comment.id === args.id
       );
-      
+
       if (commentIndex === -1) throw new Error(`Comment not found`);
 
       const commentDeleted = comments.splice(commentIndex, 1);
@@ -251,7 +185,7 @@ const resolvers = {
 };
 
 const server = new GraphQLServer({
-  typeDefs,
+  typeDefs: "./src/schema.graphql",
   resolvers,
 });
 
