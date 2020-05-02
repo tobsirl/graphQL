@@ -16,6 +16,7 @@ const typeDefs = `
 
   type Mutation {
     createUser(user: CreateUserInput!): User!
+    deleteUser(id: ID!): User!
     createPost(post: CreatePostInput!): Post!
     createComment(comment: CreateCommentInput!): Comment!
   }
@@ -128,6 +129,30 @@ const resolvers = {
       users.push(user);
 
       return user;
+    },
+    deleteUser(parent, args, ctx, info) {
+      // check if the user exists
+      const userIndex = users.findIndex((user) => user.id === args.id);
+
+      // throw an error if the user isn't found
+      if (userIndex === -1) throw new Error(`User not found`);
+
+      // delete the user using the index
+      const deleteUsers = users.splice(userIndex, 1);
+
+      posts = posts.filter((post) => {
+        const match = post.author === args.id;
+
+        if (match) {
+          comments = comments.filter((comment) => comment.post !== post.id);
+        }
+
+        return !match;
+      });
+
+      comments = comments.filter((comment) => comment.author !== args.id);
+
+      return deleteUsers;
     },
     createPost(parent, args, ctx, info) {
       // check if the user exists
