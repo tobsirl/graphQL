@@ -1,6 +1,7 @@
 import { GraphQLServer } from 'graphql-yoga';
-import { users, posts, comments } from './data';
 import { v4 as uuidv4 } from 'uuid';
+
+import db from './db';
 
 // Resolvers
 const resolvers = {
@@ -187,6 +188,10 @@ const resolvers = {
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
   resolvers,
+  context: {
+    
+
+  }
 });
 
 server.start(() => console.log(`The server is up`));

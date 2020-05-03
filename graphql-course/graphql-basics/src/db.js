@@ -1,5 +1,5 @@
 // Demo users data
-export let users = [
+const users = [
   {
     id: '1',
     name: 'Paul',
@@ -21,7 +21,7 @@ export let users = [
 ];
 
 // Demo posts data
-export let posts = [
+const posts = [
   {
     id: '10',
     title: 'Post number 1 monkey',
@@ -46,7 +46,7 @@ export let posts = [
 ];
 
 // Demo comments type
-export let comments = [
+const comments = [
   {
     id: '111',
     text: 'This is the first comment 1',
@@ -72,3 +72,9 @@ export let comments = [
     post: '30',
   },
 ];
+
+export default db = {
+  users,
+  posts,
+  comments,
+};
