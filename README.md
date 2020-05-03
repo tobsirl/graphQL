@@ -430,6 +430,44 @@ input CreateUserInput {
     age: Int!
   }
 ```
+### Deleting Data using Mutation
+Defining a mutation for deleting data is the same as a mutation for creating data. Mutations for deleting data typically require a single argument, the id of the data to be removed.
+```js
+type Mutation {
+deleteUser(id: ID!): User!
+}
+
+deleteUser(parent, args, { db }, info) {
+      // check if the user exists
+      const userIndex = db.users.findIndex((user) => user.id === args.id);
+
+      // throw an error if the user isn't found
+      if (userIndex === -1) throw new Error(`User not found`);
+
+      // delete the user using the index
+      const deletedUsers = db.users.splice(userIndex, 1);
+
+      posts.filter((post) => {
+        const match = post.author === args.id;
+
+        if (match) {
+          db.comments.filter((comment) => comment.post !== post.id);
+        }
+
+        return !match;
+      });
+
+      db.comments.filter((comment) => comment.author !== args.id);
+
+      return deletedUsers[0];
+    },
+```
+When deleting data, it's important to clean up any associated data as well. For example
+1. The user
+2. Any post  written by the user
+3. All comments on the deleted posts (regardless of which users created the comments)
+4. All comments left by the user on any other post
+
 ---
 
 ## Working with GraphQL
