@@ -73,8 +73,10 @@ const comments = [
   },
 ];
 
-export default db = {
+const db = {
   users,
   posts,
   comments,
 };
+
+export { db as default };
