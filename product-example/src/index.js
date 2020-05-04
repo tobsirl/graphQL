@@ -11,6 +11,7 @@ const typeDefs = `
 
   type Mutation {
     createCustomer(data: CreateCustomerInput!): Customer!
+    deleteCustomer(id: ID!): Customer!
     createProduct(name: String!, price: Float!, inStock: Boolean!): Product!
     createReview(title: String!, body: String!): Review!
   }
@@ -75,7 +76,8 @@ const resolvers = {
         (customer) => customer.name === args.data.name
       );
 
-      if (customerExists) throw Error(`${args.data.name} customer already exists`);
+      if (customerExists)
+        throw Error(`${args.data.name} customer already exists`);
 
       const customer = {
         id: uuidv4(),
@@ -85,6 +87,29 @@ const resolvers = {
       customers.push(customer);
 
       return customer;
+    },
+    deleteCustomer(parent, args, ctx, info) {
+      const customerIndex = customers.findIndex(
+        (customer) => customer.id === args.id
+      );
+
+      if (customerIndex === -1) throw new Error(`Customer not found`);
+
+      const deletedCustomer = customers.splice(customerIndex, 1);
+
+      products.filter((product) => {
+        const match = product.id === args.id;
+
+        if (match) {
+          reviews.filter((review) => review.customer !== product.id);
+        }
+
+        return !match;
+      });
+
+      reviews.filter((review) => review.customer !== args.id);
+
+      return deletedCustomer[0];
     },
     createProduct(parent, args, ctx, info) {
       const productExists = products.some(
