@@ -2,51 +2,6 @@ import { GraphQLServer } from 'graphql-yoga';
 import { v4 as uuidv4 } from 'uuid';
 import { customers, products, reviews } from './data';
 
-const typeDefs = `
-  type Query {
-    customers(query: String): [Customer!]!
-    products: [Product!]!
-    reviews(title: String, body: String): [Review!]!
-  }
-
-  type Mutation {
-    createCustomer(data: CreateCustomerInput!): Customer!
-    deleteCustomer(id: ID!): Customer!
-    createProduct(name: String!, price: Float!, inStock: Boolean!): Product!
-    createReview(title: String!, body: String!): Review!
-  }
-
-  input CreateCustomerInput {
-    name: String!
-    age: Int!
-    loyalityCard: Boolean!
-  }
-
-  type Customer {
-    id: ID!
-    name: String!
-    age: Int!
-    loyalityCard: Boolean!
-    products: [Product!]!
-    reviews: [Review!]!
-  }
-
-  type Product {
-    id: ID!
-    name: String!
-    price: Float!
-    inStock: Boolean!
-    customer: Customer!
-  }
-
-  type Review {
-    id: ID!
-    title: String!
-    body: String!
-    customer: Customer!
-  }
-`;
-
 const resolvers = {
   Query: {
     customers(parent, args, ctx, info) {
@@ -165,7 +120,7 @@ const resolvers = {
 };
 
 const server = new GraphQLServer({
-  typeDefs,
+  typeDefs: './src/schema.graphql',
   resolvers,
 });
 
