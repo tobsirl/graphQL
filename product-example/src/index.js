@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
+import { v4 as uuidv4 } from 'uuid';
 import { customers, products, reviews } from './data';
 
 const typeDefs = `
@@ -6,6 +7,10 @@ const typeDefs = `
     customers(query: String): [Customer!]!
     products: [Product!]!
     reviews(title: String, body: String): [Review!]!
+  }
+
+  type Mutation {
+    createCustomer(name: String!, age: Int!, loyalityCard: Boolean!): Customer!
   }
 
   type Customer {
@@ -54,6 +59,26 @@ const resolvers = {
       );
 
       return matchTitle || matchBody;
+    },
+  },
+  Mutation: {
+    createCustomer(parent, args, ctx, info) {
+      const customerExists = customers.some(
+        (customer) => customer.name === args.name
+      );
+
+      if (customerExists) throw Error(`${args.name} customer already exists`);
+
+      const customer = {
+        id: uuidv4(),
+        name: args.name,
+        age: args.age,
+        loyalityCard: args.loyalityCard,
+      };
+
+      customers.push(customer);
+
+      return customer;
     },
   },
   Product: {
