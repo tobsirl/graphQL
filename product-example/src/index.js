@@ -73,9 +73,7 @@ const resolvers = {
 
       const customer = {
         id: uuidv4(),
-        name: args.name,
-        age: args.age,
-        loyalityCard: args.loyalityCard,
+        ...args,
       };
 
       customers.push(customer);
@@ -91,9 +89,7 @@ const resolvers = {
 
       const product = {
         id: uuidv4(),
-        name: args.name,
-        price: args.price,
-        inStock: args.inStock,
+        ...args,
       };
 
       products.push(product);
@@ -109,8 +105,7 @@ const resolvers = {
 
       const review = {
         id: uuidv4(),
-        title: args.title,
-        body: args.body,
+        ...args,
       };
 
       reviews.push(review);
