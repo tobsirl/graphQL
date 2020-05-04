@@ -10,9 +10,15 @@ const typeDefs = `
   }
 
   type Mutation {
-    createCustomer(name: String!, age: Int!, loyalityCard: Boolean!): Customer!
+    createCustomer(data: CreateCustomerInput!): Customer!
     createProduct(name: String!, price: Float!, inStock: Boolean!): Product!
     createReview(title: String!, body: String!): Review!
+  }
+
+  input CreateCustomerInput {
+    name: String!
+    age: Int!
+    loyalityCard: Boolean!
   }
 
   type Customer {
@@ -66,14 +72,14 @@ const resolvers = {
   Mutation: {
     createCustomer(parent, args, ctx, info) {
       const customerExists = customers.some(
-        (customer) => customer.name === args.name
+        (customer) => customer.name === args.data.name
       );
 
-      if (customerExists) throw Error(`${args.name} customer already exists`);
+      if (customerExists) throw Error(`${args.data.name} customer already exists`);
 
       const customer = {
         id: uuidv4(),
-        ...args,
+        ...args.data,
       };
 
       customers.push(customer);
