@@ -12,6 +12,7 @@ const typeDefs = `
   type Mutation {
     createCustomer(name: String!, age: Int!, loyalityCard: Boolean!): Customer!
     createProduct(name: String!, price: Float!, inStock: Boolean!): Product!
+    createReview(title: String!, body: String!): Review!
   }
 
   type Customer {
@@ -98,6 +99,23 @@ const resolvers = {
       products.push(product);
 
       return product;
+    },
+    createReview(parent, args, ctx, info) {
+      const reviewExists = reviews.some(
+        (review) => review.title === args.title
+      );
+
+      if (reviewExists) throw Error(`${args.title} review already exists`);
+
+      const review = {
+        id: uuidv4(),
+        title: args.title,
+        body: args.body,
+      };
+
+      reviews.push(review);
+
+      return review;
     },
   },
   Product: {
