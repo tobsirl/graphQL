@@ -11,6 +11,7 @@ const typeDefs = `
 
   type Mutation {
     createCustomer(name: String!, age: Int!, loyalityCard: Boolean!): Customer!
+    createProduct(name: String!, price: Float!, inStock: Boolean!): Product!
   }
 
   type Customer {
@@ -79,6 +80,24 @@ const resolvers = {
       customers.push(customer);
 
       return customer;
+    },
+    createProduct(parent, args, ctx, info) {
+      const productExists = products.some(
+        (product) => product.name === args.name
+      );
+
+      if (productExists) throw Error(`${args.name} product already exists`);
+
+      const product = {
+        id: uuidv4(),
+        name: args.name,
+        price: args.price,
+        inStock: args.inStock,
+      };
+
+      products.push(product);
+
+      return product;
     },
   },
   Product: {
