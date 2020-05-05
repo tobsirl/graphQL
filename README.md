@@ -468,6 +468,19 @@ When deleting data, it's important to clean up any associated data as well. For 
 3. All comments on the deleted posts (regardless of which users created the comments)
 4. All comments left by the user on any other post
 
+### Context
+Making use of the ctx arguement that is passed to all resolvers. This allows us to divid the project into smaller files.
+```js
+context: {
+    db,
+  },
+
+posts(parent, args, { db }, info) {
+    return db.posts.filter((post) => {
+      return post.author === parent.id;
+    });
+  },
+```
 ---
 
 ## Working with GraphQL
