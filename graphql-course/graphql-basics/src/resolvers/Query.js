@@ -8,7 +8,7 @@ const Query = {
     );
   },
   posts(parent, args, { db }, info) {
-    if (!args.query) return posts;
+    if (!args.query) return db.posts;
 
     return db.posts.filter((post) => {
       return (
