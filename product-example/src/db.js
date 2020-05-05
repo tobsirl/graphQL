@@ -1,4 +1,4 @@
-export const customers = [
+const customers = [
   {
     id: '001',
     name: 'Jess',
@@ -19,7 +19,7 @@ export const customers = [
   },
 ];
 
-export const products = [
+const products = [
   {
     id: '10',
     name: 'Fishing Pole',
@@ -50,7 +50,7 @@ export const products = [
   },
 ];
 
-export const reviews = [
+const reviews = [
   {
     id: '201',
     title: 'Best purchase',
@@ -94,3 +94,11 @@ export const reviews = [
     customer: '003',
   },
 ];
+
+const db = {
+  customers,
+  products,
+  reviews,
+};
+
+export { db as default };

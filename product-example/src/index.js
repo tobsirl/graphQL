@@ -1,24 +1,24 @@
 import { GraphQLServer } from 'graphql-yoga';
 import { v4 as uuidv4 } from 'uuid';
-import { customers, products, reviews } from './data';
+import db from './db';
 
 const resolvers = {
   Query: {
-    customers(parent, args, ctx, info) {
-      if (!args.query) return customers;
-      return customers.filter((customer) =>
+    customers(parent, args, { db }, info) {
+      if (!args.query) return db.customers;
+      return db.customers.filter((customer) =>
         customer.name.toLowerCase().includes(args.query.toLowerCase())
       );
     },
-    products(parent, args, ctx, info) {
-      return products;
+    products(parent, args, { db }, info) {
+      return db.products;
     },
-    reviews(parent, { title, body }, ctx, info) {
+    reviews(parent, { title, body }, { db }, info) {
       if (!title && !body) return reviews;
-      const matchTitle = reviews.filter((review) =>
+      const matchTitle = db.reviews.filter((review) =>
         review.title.toLowerCase().includes(title.toLowerCase())
       );
-      const matchBody = reviews.filter((review) =>
+      const matchBody = db.reviews.filter((review) =>
         review.body.toLowerCase().includes(body.toLowerCase())
       );
 
@@ -26,8 +26,8 @@ const resolvers = {
     },
   },
   Mutation: {
-    createCustomer(parent, args, ctx, info) {
-      const customerExists = customers.some(
+    createCustomer(parent, args, { db }, info) {
+      const customerExists = db.customers.some(
         (customer) => customer.name === args.data.name
       );
 
@@ -43,31 +43,31 @@ const resolvers = {
 
       return customer;
     },
-    deleteCustomer(parent, args, ctx, info) {
-      const customerIndex = customers.findIndex(
+    deleteCustomer(parent, args, { db }, info) {
+      const customerIndex = db.customers.findIndex(
         (customer) => customer.id === args.id
       );
 
       if (customerIndex === -1) throw new Error(`Customer not found`);
 
-      const deletedCustomer = customers.splice(customerIndex, 1);
+      const deletedCustomer = db.customers.splice(customerIndex, 1);
 
-      products.filter((product) => {
+      db.products.filter((product) => {
         const match = product.id === args.id;
 
         if (match) {
-          reviews.filter((review) => review.customer !== product.id);
+          db.reviews.filter((review) => review.customer !== product.id);
         }
 
         return !match;
       });
 
-      reviews.filter((review) => review.customer !== args.id);
+      db.reviews.filter((review) => review.customer !== args.id);
 
       return deletedCustomer[0];
     },
-    createProduct(parent, args, ctx, info) {
-      const productExists = products.some(
+    createProduct(parent, args, { db }, info) {
+      const productExists = db.products.some(
         (product) => product.name === args.name
       );
 
@@ -78,12 +78,12 @@ const resolvers = {
         ...args,
       };
 
-      products.push(product);
+      db.products.push(product);
 
       return product;
     },
-    createReview(parent, args, ctx, info) {
-      const reviewExists = reviews.some(
+    createReview(parent, args, { db }, info) {
+      const reviewExists = db.reviews.some(
         (review) => review.title === args.title
       );
 
@@ -94,27 +94,27 @@ const resolvers = {
         ...args,
       };
 
-      reviews.push(review);
+      db.reviews.push(review);
 
       return review;
     },
   },
   Product: {
-    customer(parent, args, ctx, info) {
-      return customers.find((customer) => parent.customer === customer.id);
+    customer(parent, args, { db }, info) {
+      return db.customers.find((customer) => parent.customer === customer.id);
     },
   },
   Customer: {
-    products(parent, args, ctx, info) {
-      return products.filter((product) => parent.id === product.customer);
+    products(parent, args, { db }, info) {
+      return db.products.filter((product) => parent.id === product.customer);
     },
-    reviews(parent, args, ctx, info) {
-      return reviews.filter((review) => parent.id === review.customer);
+    reviews(parent, args, { db }, info) {
+      return db.reviews.filter((review) => parent.id === review.customer);
     },
   },
   Review: {
-    customer(parent, args, ctx, info) {
-      return customers.find((customer) => parent.customer === customer.id);
+    customer(parent, args, { db }, info) {
+      return db.customers.find((customer) => parent.customer === customer.id);
     },
   },
 };
@@ -122,6 +122,9 @@ const resolvers = {
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  context: {
+    db,
+  },
 });
 
 const PORT = 4000;
