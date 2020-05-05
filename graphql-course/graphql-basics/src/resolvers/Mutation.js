@@ -21,6 +21,31 @@ const Mutation = {
 
     return user;
   },
+  updateUser(parent, args, { db }, info) {
+    const { id, data } = args;
+
+    const user = db.users.find((user) => user.id === id);
+
+    if (!user) throw new Error(`User not found`);
+
+    if (typeof data.email === 'string') {
+      const emailTaken = db.users.some((user) => user.email === data.email);
+
+      if (emailTaken) throw new Error(`Email already taken`);
+
+      user.email = data.email;
+    }
+
+    if (typeof data.name === 'string') {
+      user.name = data.name;
+    }
+
+    if (typeof data.age !== 'undefined') {
+      user.age = data.age;
+    }
+
+    return user;
+  },
   deleteUser(parent, args, { db }, info) {
     // check if the user exists
     const userIndex = db.users.findIndex((user) => user.id === args.id);
@@ -102,4 +127,4 @@ const Mutation = {
   },
 };
 
-export default Mutation
+export default Mutation;
