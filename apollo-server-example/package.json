@@ -1,0 +1,16 @@
+{
+  "name": "apollo-server-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Paul Tobin <tobster111@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.13.0",
+    "graphql": "^15.0.0"
+  }
+}
