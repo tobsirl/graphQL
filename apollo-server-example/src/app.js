@@ -1,8 +1,15 @@
 const { ApolloServer, gql } = require('apollo-server');
 
 const typeDefs = gql`
+  type User {
+    id: ID!
+    name: String!
+    age: Int!
+  }
+
   type Query {
     message: String!
+    users: [User!]!
   }
 `;
 
@@ -11,6 +18,13 @@ const resolvers = {
     message: () => {
       return 'Hello World!';
     },
+    users: () => {
+      return [{
+        id: '001',
+        name: "Andrew",
+        age: 23
+      }]
+    }
   },
 };
 
