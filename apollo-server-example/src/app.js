@@ -19,16 +19,19 @@ const posts = [
     id: '100',
     title: 'Post 1',
     body: 'Body of post 1',
+    author: '001',
   },
   {
     id: '200',
     title: 'Post 2',
     body: 'Body of post 2',
+    author: '001',
   },
   {
     id: '300',
     title: 'Post 3',
     body: 'Body of post 3',
+    author: '002',
   },
 ];
 
@@ -37,12 +40,14 @@ const typeDefs = gql`
     id: ID!
     name: String!
     age: Int!
+    posts: [Post!]!
   }
 
   type Post {
     id: ID!
     title: String!
     body: String!
+    author: User!
   }
 
   type Query {
@@ -91,6 +96,16 @@ const resolvers = {
       return newUser;
     },
   },
+  Post: {
+    author: (parent, args, ctx, info) => {
+      return users.find((user) => user.id === parent.author);
+    },
+  },
+  User: {
+    posts: (parent, args, ctx, info) => {
+      return posts.filter((post) => post.author === parent.id)
+    }
+  }
 };
 
 const server = new ApolloServer({
