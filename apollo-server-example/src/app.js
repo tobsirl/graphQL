@@ -1,5 +1,18 @@
 const { ApolloServer, gql } = require('apollo-server');
 
+const users = [
+  {
+    id: '001',
+    name: 'Andrew',
+    age: 23,
+  },
+  {
+    id: '002',
+    name: 'James',
+    age: 24,
+  },
+];
+
 const typeDefs = gql`
   type User {
     id: ID!
@@ -9,6 +22,7 @@ const typeDefs = gql`
 
   type Query {
     message: String!
+    user(id: ID!): User!
     users: [User!]!
   }
 `;
@@ -18,13 +32,12 @@ const resolvers = {
     message: () => {
       return 'Hello World!';
     },
+    user: (parent, { id }, ctx, info) => {
+      return users.find((user) => user.id === id);
+    },
     users: () => {
-      return [{
-        id: '001',
-        name: "Andrew",
-        age: 23
-      }]
-    }
+      return users;
+    },
   },
 };
 
