@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server');
+const { v4 } = require('uuid');
 
 const users = [
   {
@@ -23,7 +24,11 @@ const typeDefs = gql`
   type Query {
     message: String!
     user(id: ID!): User!
-    users: [User!]!
+    users(query: String): [User]!
+  }
+
+  type Mutation {
+    createUser(name: String!, age: Int!): User!
   }
 `;
 
@@ -35,8 +40,25 @@ const resolvers = {
     user: (parent, { id }, ctx, info) => {
       return users.find((user) => user.id === id);
     },
-    users: () => {
-      return users;
+    users: (parent, { query }, ctx, info) => {
+      if (!query) return users;
+      return users.filter((user) => user.name.includes(query));
+    },
+  },
+  Mutation: {
+    createUser: (parent, args, ctx, info) => {
+      const { name, age } = args;
+      const id = v4();
+
+      const newUser = {
+        id,
+        name,
+        age,
+      };
+
+      users.push(newUser);
+
+      return newUser;
     },
   },
 };
