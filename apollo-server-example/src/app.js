@@ -14,6 +14,24 @@ const users = [
   },
 ];
 
+const posts = [
+  {
+    id: '100',
+    title: 'Post 1',
+    body: 'Body of post 1',
+  },
+  {
+    id: '200',
+    title: 'Post 2',
+    body: 'Body of post 2',
+  },
+  {
+    id: '300',
+    title: 'Post 3',
+    body: 'Body of post 3',
+  },
+];
+
 const typeDefs = gql`
   type User {
     id: ID!
@@ -21,10 +39,17 @@ const typeDefs = gql`
     age: Int!
   }
 
+  type Post {
+    id: ID!
+    title: String!
+    body: String!
+  }
+
   type Query {
     message: String!
     user(id: ID!): User!
     users(query: String): [User]!
+    posts(title: String): [Post]!
   }
 
   type Mutation {
@@ -43,6 +68,11 @@ const resolvers = {
     users: (parent, { query }, ctx, info) => {
       if (!query) return users;
       return users.filter((user) => user.name.includes(query));
+    },
+    posts: (parent, { title }, ctx, info) => {
+      if (!title) return posts;
+
+      return posts.filter((post) => post.title.includes(title));
     },
   },
   Mutation: {
