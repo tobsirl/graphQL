@@ -117,7 +117,7 @@ const Mutation = {
 
     return deletedPosts[0];
   },
-  createComment(parent, args, { db }, info) {
+  createComment(parent, args, { db, pubsub }, info) {
     // check if the user exists
     const userExists = db.users.some((user) => user.id === args.comment.author);
     const postExists = db.posts.some(
@@ -132,6 +132,8 @@ const Mutation = {
     };
 
     db.comments.push(comment);
+
+    pubsub.publish(`comment ${args.comment.post}`, { comment });
 
     return comment;
   },
