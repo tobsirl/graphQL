@@ -291,8 +291,8 @@ type Post {
     body: String!
     published: Boolean!
   }
-  
-// Resovler 
+
+// Resovler
 post() {
     return {
       id: '123abc',
@@ -302,18 +302,22 @@ post() {
     };
   },
 ```
+
 ### Operation Arguments
+
 ```js
   type Query {
     greeting(name: String): String!
   }
-  
+
   // Resolver
   greeting(parent, { name }, ctx, info) {
       return `Welcome to GraphQL ${name}`;
     },
 ```
+
 ### Working with Arrays
+
 ```js
 type Query {
     users(query: String): [User!]!
@@ -328,9 +332,12 @@ type Query {
       );
     },
 ```
+
 ### Relational Data
+
 Setting up relationships between object types allows you to query based on those relationships, this is on of the best features for GraphQL.
-```js 
+
+```js
 type User {
     id: ID!
     name: String!
@@ -354,7 +361,9 @@ Post: {
     },
 }
 ```
+
 ### Relational Data: Arrays
+
 ```js
 type User {
     id: ID!
@@ -382,10 +391,12 @@ User: {
 ```
 
 ### Mutations
-Mutations, like queries, must be defined in your application schema. Defining a mutation is similar to defining a query. 
+
+Mutations, like queries, must be defined in your application schema. Defining a mutation is similar to defining a query.
 The major difference is that queries are defined on the `Query` type while mutations are defined on the `Mutation` type.
 
 Resolver methods for mutations live on the `Mutation` property of the `resolover` object
+
 ```js
 type Mutation {
     createUser(name: String!, email: String!, age: Int): User!
@@ -416,9 +427,11 @@ type Mutation {
     },
 }
 ```
+
 ### Input Type
 
 The input type allows you to set up arguments as objects, given you more control over how your operations functions.
+
 ```js
 type Mutation {
     createUser(user: CreateUserInput!): User!
@@ -430,8 +443,11 @@ input CreateUserInput {
     age: Int!
   }
 ```
+
 ### Deleting Data using Mutation
+
 Defining a mutation for deleting data is the same as a mutation for creating data. Mutations for deleting data typically require a single argument, the id of the data to be removed.
+
 ```js
 type Mutation {
 deleteUser(id: ID!): User!
@@ -462,14 +478,18 @@ deleteUser(parent, args, { db }, info) {
       return deletedUsers[0];
     },
 ```
+
 When deleting data, it's important to clean up any associated data as well. For example
+
 1. The user
-2. Any post  written by the user
+2. Any post written by the user
 3. All comments on the deleted posts (regardless of which users created the comments)
 4. All comments left by the user on any other post
 
 ### Context
+
 Making use of the ctx arguement that is passed to all resolvers. This allows us to divid the project into smaller files.
+
 ```js
 context: {
     db,
@@ -481,6 +501,53 @@ posts(parent, args, { db }, info) {
     });
   },
 ```
+
+### Subscriptions
+
+Subscriptions give clients a way to subscribe to data changes and get notified by the server when data changes. This allows for the development of real-time applications.
+
+```js
+// schema.graphql
+type Subscription {
+  count: Int!
+}
+
+# index.js
+import { GraphQLServer, PubSub } from 'graphql-yoga';
+
+import Subscription from './resolvers/Subscription';
+
+const pubsub = new PubSub();
+
+const server = new GraphQLServer({
+  typeDefs: './src/schema.graphql',
+  resolvers: {
+    Subscription,
+  },
+  context: {
+    pubsub,
+  },
+
+# Subscription.js
+const Subscription = {
+  count: {
+    subscribe(parent, args, { pubsub }, info) {
+      let count = 0;
+
+      setInterval(() => {
+        count++;
+        pubsub.publish('count', {
+          count,
+        });
+      }, 10000);
+
+      return pubsub.asyncIterator('count');
+    },
+  },
+};
+});
+```
+
 ---
 
 ## Working with GraphQL
