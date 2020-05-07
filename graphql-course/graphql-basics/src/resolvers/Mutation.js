@@ -3,17 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 const Mutation = {
   createUser(parent, args, { db }, info) {
     // check if the email is already taken
-    const emailTaken = db.users.some((user) => user.email === args.user.email);
+    const emailTaken = db.users.some((user) => user.email === args.data.email);
 
     // throw an error if the email is taken
     if (emailTaken) {
-      throw new Error(`Email taken ${args.user.email}`);
+      throw new Error(`Email taken ${args.data.email}`);
     }
 
     // create the user
     const user = {
       id: uuidv4(),
-      ...args.user,
+      ...args.data,
     };
 
     // save the user
@@ -72,16 +72,22 @@ const Mutation = {
   },
   createPost(parent, args, { db, pubsub }, info) {
     // check if the user exists
-    const userExists = db.users.some((user) => user.id === args.post.author);
+    const userExists = db.users.some((user) => user.id === args.data.author);
 
     if (!userExists) throw new Error(`User not found`);
 
     const post = {
       id: uuidv4(),
-      ...args.post,
+      ...args.data,
     };
 
-    if (args.post.published) pubsub.publish('post', { post });
+    if (args.data.published)
+      pubsub.publish('post', {
+        post: {
+          mutation: 'CREATED',
+          data: post,
+        },
+      });
 
     db.posts.push(post);
 
@@ -108,16 +114,24 @@ const Mutation = {
 
     return post;
   },
-  deletePost(parent, args, { db }, info) {
+  deletePost(parent, args, { db, pubsub }, info) {
     const postIndex = db.posts.findIndex((post) => post.id === args.id);
 
     if (postIndex === -1) throw new Error(`Post not found`);
 
-    const deletedPosts = db.posts.splice(postIndex, 1);
+    const [post] = db.posts.splice(postIndex, 1);
 
     db.comments.filter((comment) => comment.post !== args.id);
 
-    return deletedPosts[0];
+    if (post.published)
+      pubsub.publish('post', {
+        post: {
+          mutation: 'DELETED',
+          data: post,
+        },
+      });
+
+    return post;
   },
   createComment(parent, args, { db, pubsub }, info) {
     // check if the user exists
