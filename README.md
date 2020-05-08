@@ -548,6 +548,26 @@ const Subscription = {
 });
 ```
 
+### ENUM ([Enumeration](https://graphql.org/learn/schema/#enumeration-types))
+
+Also called Enums, enumeration types are a special kind of scalar that is restricted to a particular set of allowed values. This allows you to:
+
+1. Validate that any arguments of this type are one of the allowed values
+2. Communicate through the type system that a field will always be one of a finite set of values
+
+```js
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  data: Post!
+}
+```
+
 ---
 
 ## Working with GraphQL
