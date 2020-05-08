@@ -163,25 +163,30 @@ const Mutation = {
   },
   createComment(parent, args, { db, pubsub }, info) {
     // check if the user exists
-    const userExists = db.users.some((user) => user.id === args.comment.author);
+    const userExists = db.users.some((user) => user.id === args.data.author);
     const postExists = db.posts.some(
-      (post) => post.id === args.comment.post && post.published === true
+      (post) => post.id === args.data.post && post.published === true
     );
 
     if (!userExists || !postExists) throw new Error(`User not found`);
 
     const comment = {
       id: uuidv4(),
-      ...args.comment,
+      ...args.data,
     };
 
     db.comments.push(comment);
 
-    pubsub.publish(`comment ${args.comment.post}`, { comment });
+    pubsub.publish(`comment ${args.data.post}`, {
+      comment: {
+        mutation: 'CREATED',
+        data: comment,
+      },
+    });
 
     return comment;
   },
-  updateComment(parent, args, { db }, info) {
+  updateComment(parent, args, { db, pubsub }, info) {
     const { id, data } = args;
 
     const comment = db.comments.find((comment) => comment.id === id);
@@ -192,18 +197,32 @@ const Mutation = {
       comment.text = data.text;
     }
 
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: 'UPDATED',
+        data: comment,
+      },
+    });
+
     return comment;
   },
-  deleteComment(parent, args, { db }, info) {
-    const commentIndex = comments.findIndex(
+  deleteComment(parent, args, { db, pubsub }, info) {
+    const commentIndex = db.comments.findIndex(
       (comment) => comment.id === args.id
     );
 
     if (commentIndex === -1) throw new Error(`Comment not found`);
 
-    const commentDeleted = db.comments.splice(commentIndex, 1);
+    const [deletedComment] = db.comments.splice(commentIndex, 1);
 
-    return commentDeleted[0];
+    pubsub.publish(`comment ${deletedComment.post}`, {
+      comment: {
+        mutation: 'DELETED',
+        data: deletedComment,
+      },
+    });
+
+    return deletedComment;
   },
 };
 
