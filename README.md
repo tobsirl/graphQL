@@ -586,3 +586,19 @@ Prisma is an `open-source database toolkit`. It replaces traditional ORMs and ma
 ```shell
 npm i -g prisma
 ```
+
+2. Install docker toolbox
+Follow the [instructions](https://docs.docker.com/toolbox/toolbox_install_windows/) 
+   
+3. Run Prisma to generate files
+```shell
+prisma init
+```
+4. Run docker compose
+```shell
+docker-compose up -d
+```
+5. 
+   
+
+
