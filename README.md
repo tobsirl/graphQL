@@ -575,3 +575,14 @@ type PostSubscriptionPayload {
 #### [graphiql](https://www.electronjs.org/apps/graphiql)
 
 #### [Postman GraphQL](https://learning.postman.com/docs/postman/sending-api-requests/graphql/)
+
+---
+
+## [Prisma](https://www.prisma.io/)
+
+Prisma is an `open-source database toolkit`. It replaces traditional ORMs and makes database access easy with an auto-generated query builder for TypeScript(Prisma V2) and JavaScript(Prisma V1).
+
+1. Install Prisma Latest Version 1.34
+```shell
+npm i -g prisma
+```
