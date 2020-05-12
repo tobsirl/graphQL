@@ -601,5 +601,13 @@ docker-compose up -d
 ```
 5. Run `prisma deploy`
    
+### Integrating Prisma into a Node.js Project
+To communicate with the Prisma GraphQL API we can use an npm package called Prisma Binding
+
+Install Prisma Bindings [link](https://www.npmjs.com/package/prisma-binding)
+
+```shell
+npm install prisma-binding graphql-cli
+```
 
 
