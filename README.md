@@ -580,7 +580,7 @@ type PostSubscriptionPayload {
 
 ## [Prisma](https://www.prisma.io/)
 
-Prisma is an `open-source database toolkit`. It replaces traditional ORMs and makes database access easy with an auto-generated query builder for TypeScript(Prisma V2) and JavaScript(Prisma V1).
+Prisma is an `open-source database toolkit`. It replaces traditional ORMs and makes database access easy with an auto-generated query builder for TypeScript (Prisma V2) and JavaScript (Prisma V1).
 
 1. Install Prisma Latest Version 1.34
 ```shell
@@ -588,9 +588,10 @@ npm i -g prisma
 ```
 
 2. Install docker toolbox
+
 Follow the [instructions](https://docs.docker.com/toolbox/toolbox_install_windows/) 
    
-3. Run Prisma to generate files
+1. Run Prisma to generate files
 ```shell
 prisma init
 ```
@@ -598,7 +599,7 @@ prisma init
 ```shell
 docker-compose up -d
 ```
-5. 
+5. Run `prisma deploy`
    
 
 
