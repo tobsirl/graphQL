@@ -22,3 +22,26 @@ const prisma = new Prisma({
 
 // getPosts()
 
+prisma.mutation
+  .createPost(
+    {
+      data: {
+        title: 'Promise Chaining',
+        body: 'Body of Promise Chaining',
+        published: false,
+        author: {
+          connect: {
+            id: 'cka2pfwtw00240755awi7s846',
+          },
+        },
+      },
+    },
+    '{ id title body published}'
+  )
+  .then((data) => {
+    console.log(JSON.stringify(data, null, 2));
+    return prisma.query.users(null, `{ id name email posts { id title } }`);
+  })
+  .then((data) => {
+    console.log(JSON.stringify(data, null, 2));
+  });
