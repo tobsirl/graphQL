@@ -5,34 +5,66 @@ const prisma = new Prisma({
   endpoint: 'http://192.168.99.100:4466/',
 });
 
-// Prisma Bindings using Async/Await
-// 1. Create a new posts
-// 2. Fetch all the info about the user (author)
-
-const createPostUser = async (authorId, data) => {
-  const newPost = await prisma.mutation.createPost(
+const updatePostForUser = async (postId, data) => {
+  const post = await prisma.mutation.updatePost(
     {
       data: {
         ...data,
-        author: {
-          connect: {
-            id: authorId,
-          },
-        },
+      },
+      where: {
+        id: postId,
       },
     },
-    `{ id }`
+    `{ author { id } }`
   );
-  const newUser = await prisma.query.user(
+
+  const getUser = await prisma.query.user(
     {
       where: {
-        id: authorId,
+        id: post.author.id,
       },
     },
     `{ id name email posts { id title published }}`
   );
-  return newUser;
+  return getUser;
 };
+
+updatePostForUser('cka5ifce4008d0755osksy6he', {
+  title: 'test',
+  body: 'to see',
+  published: true,
+}).then((user) => {
+  console.log(JSON.stringify(user, null, 2));
+});
+
+// Prisma Bindings using Async/Await
+// 1. Create a new posts
+// 2. Fetch all the info about the user (author)
+
+// const createPostUser = async (authorId, data) => {
+//   const newPost = await prisma.mutation.createPost(
+//     {
+//       data: {
+//         ...data,
+//         author: {
+//           connect: {
+//             id: authorId,
+//           },
+//         },
+//       },
+//     },
+//     `{ id }`
+//   );
+//   const newUser = await prisma.query.user(
+//     {
+//       where: {
+//         id: authorId,
+//       },
+//     },
+//     `{ id name email posts { id title published }}`
+//   );
+//   return newUser;
+// };
 
 // createPostUser('cka2rmn54004h0755svx22fpq', {
 //   title: 'Great books to read',
