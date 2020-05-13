@@ -5,6 +5,43 @@ const prisma = new Prisma({
   endpoint: 'http://192.168.99.100:4466/',
 });
 
+// Prisma Bindings using Async/Await
+// 1. Create a new posts
+// 2. Fetch all the info about the user (author)
+
+const createPostUser = async (authorId, data) => {
+  const newPost = await prisma.mutation.createPost(
+    {
+      data: {
+        ...data,
+        author: {
+          connect: {
+            id: authorId,
+          },
+        },
+      },
+    },
+    `{ id }`
+  );
+  const newUser = await prisma.query.user(
+    {
+      where: {
+        id: authorId,
+      },
+    },
+    `{ id name email posts { id title published }}`
+  );
+  return newUser;
+};
+
+// createPostUser('cka2rmn54004h0755svx22fpq', {
+//   title: 'Great books to read',
+//   body: 'The Art of War',
+//   published: true,
+// }).then((user) => {
+//   console.log(JSON.stringify(user, null, 2));
+// });
+
 // Prisma Binding Queries
 // prisma.query.users(null, '{ id name email posts { id title } }').then((data) => {
 //   console.log(JSON.stringify(data, null, 2));
@@ -46,23 +83,23 @@ const prisma = new Prisma({
 //     console.log(JSON.stringify(data, null, 2));
 //   });
 
-prisma.mutation
-  .updatePost(
-    {
-      data: {
-        body: 'Change the Body',
-        published: true,
-      },
-      where: {
-        id: 'cka5ie8pa007z0755twl8nri2',
-      },
-    },
-    '{ id title body published }'
-  )
-  .then((data) => {
-    console.log(JSON.stringify(data, null, 2));
-    return prisma.query.posts(null, `{ id title body published}`);
-  })
-  .then((data) => {
-    console.log(JSON.stringify(data, null, 2));
-  });
+// prisma.mutation
+//   .updatePost(
+//     {
+//       data: {
+//         body: 'Change the Body',
+//         published: true,
+//       },
+//       where: {
+//         id: 'cka5ie8pa007z0755twl8nri2',
+//       },
+//     },
+//     '{ id title body published }'
+//   )
+//   .then((data) => {
+//     console.log(JSON.stringify(data, null, 2));
+//     return prisma.query.posts(null, `{ id title body published}`);
+//   })
+//   .then((data) => {
+//     console.log(JSON.stringify(data, null, 2));
+//   });
