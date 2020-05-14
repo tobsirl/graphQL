@@ -5,74 +5,92 @@ const prisma = new Prisma({
   endpoint: 'http://192.168.99.100:4466/',
 });
 
-const updatePostForUser = async (postId, data) => {
-  const post = await prisma.mutation.updatePost(
-    {
-      data: {
-        ...data,
-      },
-      where: {
-        id: postId,
-      },
-    },
-    `{ author { id } }`
-  );
+// prisma.query prisma.mutation prisma.subscription prisma.exists
 
-  const getUser = await prisma.query.user(
-    {
-      where: {
-        id: post.author.id,
-      },
-    },
-    `{ id name email posts { id title published }}`
-  );
-  return getUser;
-};
+// prisma.exists
+//   .Comment({
+//     id: 'cka2scb6u005h0755t7h7io03',
+//   })
+//   .then((exists) => {
+//     console.log(exists);
+//   });
 
-updatePostForUser('cka5ifce4008d0755osksy6he', {
-  title: 'test',
-  body: 'to see',
-  published: true,
-}).then((user) => {
-  console.log(JSON.stringify(user, null, 2));
-});
+// const updatePostForUser = async (postId, data) => {
+//   const post = await prisma.mutation.updatePost(
+//     {
+//       data: {
+//         ...data,
+//       },
+//       where: {
+//         id: postId,
+//       },
+//     },
+//     `{ author { id } }`
+//   );
+
+//   const getUser = await prisma.query.user(
+//     {
+//       where: {
+//         id: post.author.id,
+//       },
+//     },
+//     `{ id name email posts { id title published }}`
+//   );
+//   return getUser;
+// };
+
+// updatePostForUser('cka5ifce4008d0755osksy6he', {
+//   title: 'test',
+//   body: 'to see',
+//   published: true,
+// }).then((user) => {
+//   console.log(JSON.stringify(user, null, 2));
+// });
 
 // Prisma Bindings using Async/Await
 // 1. Create a new posts
 // 2. Fetch all the info about the user (author)
 
-// const createPostUser = async (authorId, data) => {
-//   const newPost = await prisma.mutation.createPost(
-//     {
-//       data: {
-//         ...data,
-//         author: {
-//           connect: {
-//             id: authorId,
-//           },
-//         },
-//       },
-//     },
-//     `{ id }`
-//   );
-//   const newUser = await prisma.query.user(
-//     {
-//       where: {
-//         id: authorId,
-//       },
-//     },
-//     `{ id name email posts { id title published }}`
-//   );
-//   return newUser;
-// };
+const createPostUser = async (authorId, data) => {
+  const userExists = await prisma.exists.User({
+    id: authorId,
+  });
 
-// createPostUser('cka2rmn54004h0755svx22fpq', {
-//   title: 'Great books to read',
-//   body: 'The Art of War',
-//   published: true,
-// }).then((user) => {
-//   console.log(JSON.stringify(user, null, 2));
-// });
+  if (!userExists) throw new Error(`User with the id: ${authorId} not found!`);
+
+  const newPost = await prisma.mutation.createPost(
+    {
+      data: {
+        ...data,
+        author: {
+          connect: {
+            id: authorId,
+          },
+        },
+      },
+    },
+    `{ id }`
+  );
+  const newUser = await prisma.query.user(
+    {
+      where: {
+        id: authorId,
+      },
+    },
+    `{ id name email posts { id title published }}`
+  );
+  return newUser;
+};
+
+createPostUser('cka2rmn54004h0755svx22fpq', {
+  title: 'Great books to read',
+  body: 'The Art of War',
+  published: true,
+})
+  .then((user) => {
+    console.log(JSON.stringify(user, null, 2));
+  })
+  .catch((err) => console.error(err.message));
 
 // Prisma Binding Queries
 // prisma.query.users(null, '{ id name email posts { id title } }').then((data) => {
