@@ -609,5 +609,38 @@ Install Prisma Bindings [link](https://www.npmjs.com/package/prisma-binding)
 ```shell
 npm install prisma-binding graphql-cli
 ```
+### Example of using Prisma Binding
+```js
+const updatePostForUser = async (postId, data) => {
+  const post = await prisma.mutation.updatePost(
+    {
+      data: {
+        ...data,
+      },
+      where: {
+        id: postId,
+      },
+    },
+    `{ author { id } }`
+  );
 
+  const getUser = await prisma.query.user(
+    {
+      where: {
+        id: post.author.id,
+      },
+    },
+    `{ id name email posts { id title published }}`
+  );
+  return getUser;
+};
+
+updatePostForUser('cka5ifce4008d0755osksy6he', {
+  title: 'test',
+  body: 'to see',
+  published: true,
+}).then((user) => {
+  console.log(JSON.stringify(user, null, 2));
+});
+```
 
