@@ -3,6 +3,8 @@ type Customer {
   name: String! @unique
   age: Int!
   loyalityCard: Boolean!
+  products: [Product!]! @relation(name: "CustomerToProduct", onDelete: CASCADE)
+  reviews: [Review!]! @relation(name: "CustomerToReview", onDelete: CASCADE)
 }
 
 type Product {
@@ -10,11 +12,13 @@ type Product {
   name: String!
   price: Float!
   inStock: Boolean!
+  customer: Customer! @relation(name: "CustomerToProduct", onDelete: SET_NULL)
 }
 
 type Review {
   id: ID! @id
   title: String!
   body: String!
+  author: Customer! @relation(name: "CustomerToReview", onDelete: SET_NULL)
 }
 
