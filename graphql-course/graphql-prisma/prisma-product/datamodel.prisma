@@ -1,4 +1,20 @@
-type User {
+type Customer {
   id: ID! @id
+  name: String! @unique
+  age: Int!
+  loyalityCard: Boolean!
+}
+
+type Product {
+  id: ID! @id
+  name: String!
+  price: Float!
+  inStock: Boolean!
+}
+
+type Review {
+  id: ID! @id
+  title: String!
+  body: String!
 }
 
