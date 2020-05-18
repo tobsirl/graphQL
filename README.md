@@ -583,25 +583,31 @@ type PostSubscriptionPayload {
 Prisma is an `open-source database toolkit`. It replaces traditional ORMs and makes database access easy with an auto-generated query builder for TypeScript (Prisma V2) and JavaScript (Prisma V1).
 
 1. Install Prisma Latest Version 1.34
+
 ```shell
 npm i -g prisma
 ```
 
 2. Install docker toolbox
 
-Follow the [instructions](https://docs.docker.com/toolbox/toolbox_install_windows/) 
-   
+Follow the [instructions](https://docs.docker.com/toolbox/toolbox_install_windows/)
+
 1. Run Prisma to generate files
+
 ```shell
 prisma init
 ```
+
 4. Run docker compose
+
 ```shell
 docker-compose up -d
 ```
+
 5. Run `prisma deploy`
-   
+
 ### Integrating Prisma into a Node.js Project
+
 To communicate with the Prisma GraphQL API we can use an npm package called Prisma Binding
 
 Install Prisma Bindings [link](https://www.npmjs.com/package/prisma-binding)
@@ -609,7 +615,9 @@ Install Prisma Bindings [link](https://www.npmjs.com/package/prisma-binding)
 ```shell
 npm install prisma-binding graphql-cli
 ```
+
 ### Example of using Prisma Binding
+
 ```js
 const updatePostForUser = async (postId, data) => {
   const post = await prisma.mutation.updatePost(
@@ -644,3 +652,34 @@ updatePostForUser('cka5ifce4008d0755osksy6he', {
 });
 ```
 
+### Checking if data exists
+
+Using the exists property to determine if the post exists in the database.
+
+```js
+const postExist = await prisma.exists.Post({ id: postId });
+```
+
+### Using the @relation directive
+
+Setting up relationships between the different types. You can determine what happens to a users posts if the user is deleted.
+`onDelete: CASCADE` will delete the user along with all their posts, `onDelete: SET_NULL` will set the posts by the user to null.
+
+```js
+type User {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  posts: [Post!]! @relation(name: "PostToUser", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentToUser", onDelete: CASCADE)
+}
+
+type Post {
+  id: ID! @id
+  title: String!
+  body: String!
+  published: Boolean!
+  author: User! @relation(name: "PostToUser", onDelete: SET_NULL)
+  comments: [Comment!]! @relation(name: "CommentToPost", onDelete: CASCADE)
+}
+```
