@@ -89,24 +89,8 @@ const Mutation = {
 
     return post;
   },
-  deletePost(parent, args, { db, pubsub }, info) {
-    const postIndex = db.posts.findIndex((post) => post.id === args.id);
-
-    if (postIndex === -1) throw new Error(`Post not found`);
-
-    const [post] = db.posts.splice(postIndex, 1);
-
-    db.comments.filter((comment) => comment.post !== args.id);
-
-    if (post.published)
-      pubsub.publish('post', {
-        post: {
-          mutation: 'DELETED',
-          data: post,
-        },
-      });
-
-    return post;
+  async deletePost(parent, args, { prisma }, info) {
+    return await prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
   createComment(parent, args, { db, pubsub }, info) {
     // check if the user exists
