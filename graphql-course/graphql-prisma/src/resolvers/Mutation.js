@@ -10,61 +10,35 @@ const Mutation = {
 
     return await prisma.mutation.createUser({ data: args.data }, info);
   },
-  updateUser(parent, args, { db }, info) {
+  async updateUser(parent, args, { prisma }, info) {
     const { id, data } = args;
 
-    const user = db.users.find((user) => user.id === id);
-
-    if (!user) throw new Error(`User not found`);
-
-    if (typeof data.email === 'string') {
-      const emailTaken = db.users.some((user) => user.email === data.email);
-
-      if (emailTaken) throw new Error(`Email already taken`);
-
-      user.email = data.email;
-    }
-
-    if (typeof data.name === 'string') {
-      user.name = data.name;
-    }
-
-    if (typeof data.age !== 'undefined') {
-      user.age = data.age;
-    }
-
-    return user;
+    return await prisma.mutation.updateUser(
+      { where: { id: id }, data: data },
+      info
+    );
   },
   async deleteUser(parent, args, { prisma }, info) {
     const userExists = await prisma.exists.User({ id: args.id });
-    console.log(args.id);
 
     if (!userExists) throw new Error(`No user with id: ${args.id} exists`);
 
     return await prisma.mutation.deleteUser({ where: { id: args.id } }, info);
   },
-  createPost(parent, args, { db, pubsub }, info) {
-    // check if the user exists
-    const userExists = db.users.some((user) => user.id === args.data.author);
+  async createPost(parent, args, { prisma }, info) {
+    const { title, body, published, author } = args.data;
 
-    if (!userExists) throw new Error(`User not found`);
-
-    const post = {
-      id: uuidv4(),
-      ...args.data,
-    };
-
-    if (args.data.published)
-      pubsub.publish('post', {
-        post: {
-          mutation: 'CREATED',
-          data: post,
+    return await prisma.mutation.createPost(
+      {
+        data: {
+          title: title,
+          body: body,
+          published: published,
+          author: { connect: { id: author } },
         },
-      });
-
-    db.posts.push(post);
-
-    return post;
+      },
+      info
+    );
   },
   updatePost(parent, args, { db, pubsub }, info) {
     const { id, data } = args;
