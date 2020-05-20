@@ -684,7 +684,7 @@ type Post {
 }
 ```
 ### Adding Prisma to graphQL queries
-Using the `info` parameter to pass the AST
+Using the `info` parameter, `info` contains the query AST and more execution information
 ```js
 users(parent, args, { prisma }, info) {
     const opArgs = {};
@@ -696,5 +696,37 @@ users(parent, args, { prisma }, info) {
     }
 
     return prisma.query.users(opArgs, info);
+  },
+```
+
+### Adding Prisma to graphQL mutations
+This dramatically reduces the amount of code required
+
+```js
+async createPost(parent, args, { prisma }, info) {
+    const { title, body, published, author } = args.data;
+
+    return await prisma.mutation.createPost(
+      {
+        data: {
+          title: title,
+          body: body,
+          published: published,
+          author: { connect: { id: author } },
+        },
+      },
+      info
+    );
+  },
+  async updatePost(parent, args, { prisma }, info) {
+    const { id, data } = args;
+
+    return await prisma.mutation.updatePost(
+      { where: { id: id }, data: data },
+      info
+    );
+  },
+  async deletePost(parent, args, { prisma }, info) {
+    return await prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
 ```
