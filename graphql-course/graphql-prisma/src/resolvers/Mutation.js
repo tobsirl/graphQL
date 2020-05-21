@@ -13,13 +13,26 @@ import jwt from 'jsonwebtoken';
 // const verify = jwt.verify(token, 'mysecret');
 // console.log(verify);
 
+// using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
+// const dummy = async () => {
+//   const email = `rharris@example.com`;
+//   const password = 'pass1234';
+
+//   const hashedPassword = `$2a$10$dJpZmRGkej6y5ap0p3UMfudUZsci9g6jE9dZMsZc.UIgbr0iY5Yiq`;
+
+//   const isMatch = await bcryptjs.compare(password, hashedPassword);
+//   console.log(isMatch);
+// };
+
+// dummy();
+
 const Mutation = {
   async createUser(parent, args, { prisma }, info) {
-    const emailTaken = await prisma.exists.User({ email: args.data.email });
+    // const emailTaken = await prisma.exists.User({ email: args.data.email });
 
-    if (emailTaken) {
-      throw new Error(`Email taken ${args.data.email}`);
-    }
+    // if (emailTaken) {
+    //   throw new Error(`Email taken ${args.data.email}`);
+    // }
 
     if (args.data.password.length < 8) {
       throw new Error(`Password must be 8 charactors or longer.`);
@@ -27,15 +40,12 @@ const Mutation = {
 
     const password = await bcryptjs.hash(args.data.password, 10);
 
-    const user = await prisma.mutation.createUser(
-      {
-        data: {
-          ...args.data,
-          password,
-        },
+    const user = await prisma.mutation.createUser({
+      data: {
+        ...args.data,
+        password,
       },
-      info
-    );
+    });
 
     return { user, token: jwt.sign({ userId: user.id }, 'mysecret') };
   },
