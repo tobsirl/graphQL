@@ -27,8 +27,23 @@ import jwt from 'jsonwebtoken';
 // dummy();
 
 const Mutation = {
-  login(parent, args, {prisma}, info) {
+  async login(parent, args, { prisma }, info) {
+    const user = await prisma.query.user({
+      where: {
+        email: args.data.email,
+      },
+    });
 
+    if (!user) throw new Error(`Unable to login`);
+
+    const isMatch = await bcryptjs.compare(args.data.password, user.password);
+
+    if (!isMatch) throw new Error(`Incorrect login details`);
+
+    return {
+      user,
+      token: jwt.sign({ userId: user.id }, 'mysecret'),
+    };
   },
   async createUser(parent, args, { prisma }, info) {
     // const emailTaken = await prisma.exists.User({ email: args.data.email });

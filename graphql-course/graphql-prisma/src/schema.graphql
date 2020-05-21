@@ -34,7 +34,7 @@ type AuthPayload {
   user: User!
 }
 
-type LoginUserInput {
+input LoginUserInput {
   email: String!
   password: String!
 }
