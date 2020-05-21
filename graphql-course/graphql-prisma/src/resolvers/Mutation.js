@@ -27,6 +27,9 @@ import jwt from 'jsonwebtoken';
 // dummy();
 
 const Mutation = {
+  login(parent, args, {prisma}, info) {
+
+  },
   async createUser(parent, args, { prisma }, info) {
     // const emailTaken = await prisma.exists.User({ email: args.data.email });
 
