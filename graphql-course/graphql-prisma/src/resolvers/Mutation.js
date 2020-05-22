@@ -1,6 +1,8 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+import getUserId from '../utils/getUserId';
+
 // take in the password -> validate password -> hash password -> generate auth token
 // JSON Web Token (JWT)
 
@@ -82,8 +84,12 @@ const Mutation = {
 
     return await prisma.mutation.deleteUser({ where: { id: args.id } }, info);
   },
-  async createPost(parent, args, { prisma }, info) {
+  async createPost(parent, args, { prisma, request }, info) {
     const { title, body, published, author } = args.data;
+
+    const userId = getUserId(request);
+
+    // get the header value, parse out the token, verify...
 
     return await prisma.mutation.createPost(
       {
@@ -91,7 +97,7 @@ const Mutation = {
           title: title,
           body: body,
           published: published,
-          author: { connect: { id: author } },
+          author: { connect: { id: userId } },
         },
       },
       info
