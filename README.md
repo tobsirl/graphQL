@@ -749,4 +749,12 @@ async createPost(parent, args, { prisma }, info) {
       );
     },
 ```
-
+---
+## Securing the backend Authentication
+To restrict access to the database, Prisma allows a secret to be configured. The secret is similar to a password, is required in order to read and write from the database using Prisma API.
+Secret added to the prisma.yml
+```ymal
+endpoint: http://192.168.99.100:4466
+datamodel: datamodel.prisma
+secret: thecakeisalie
+```
