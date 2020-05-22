@@ -10,7 +10,7 @@ type Mutation {
   # User
   login(data: LoginUserInput!): AuthPayload!
   createUser(data: CreateUserInput!): AuthPayload!
-  updateUser(id: ID!, data: UpdateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
   deleteUser(id: ID!): User!
 
   # Post
