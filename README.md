@@ -770,3 +770,31 @@ Add the generate token to the HTTP Authorization header
   "Authorization": "Bearer <<Generated Token>>"
 }
 ``` 
+### Using bcryptjs [link](https://www.npmjs.com/package/bcryptjs)
+Using bcrypt to hash the password, this hashed password is stored in the database.
+```js
+const password = await bcryptjs.hash(args.data.password, 10);
+
+    const user = await prisma.mutation.createUser({
+      data: {
+        ...args.data,
+        password,
+      },
+    });
+```
+Using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
+```js
+const dummy = async () => {
+  const email = `rharris@example.com`;
+  const password = 'pass1234';
+
+  const hashedPassword = `$2a$10$dJpZmRGkej6y5ap0p3UMfudUZsci9g6jE9dZMsZc.UIgbr0iY5Yiq`;
+
+  const isMatch = await bcryptjs.compare(password, hashedPassword);
+  console.log(isMatch);
+};
+
+dummy();
+```
+
+
