@@ -730,3 +730,23 @@ async createPost(parent, args, { prisma }, info) {
     return await prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
 ```
+
+### Adding Prisma to graphQl subscriptions
+```js
+ comment: {
+    subscribe(parent, { postId }, { prisma }, info) {
+      return prisma.subscription.comment(
+        {
+          where: {
+            node: {
+              post: {
+                id: postId,
+              },
+            },
+          },
+        },
+        info
+      );
+    },
+```
+
