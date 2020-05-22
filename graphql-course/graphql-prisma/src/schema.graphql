@@ -11,7 +11,7 @@ type Mutation {
   login(data: LoginUserInput!): AuthPayload!
   createUser(data: CreateUserInput!): AuthPayload!
   updateUser(data: UpdateUserInput!): User!
-  deleteUser(id: ID!): User!
+  deleteUser: User!
 
   # Post
   createPost(data: CreatePostInput!): Post!

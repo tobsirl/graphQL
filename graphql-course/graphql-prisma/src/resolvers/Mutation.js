@@ -79,12 +79,10 @@ const Mutation = {
       info
     );
   },
-  async deleteUser(parent, args, { prisma }, info) {
-    const userExists = await prisma.exists.User({ id: args.id });
+  async deleteUser(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
 
-    if (!userExists) throw new Error(`No user with id: ${args.id} exists`);
-
-    return await prisma.mutation.deleteUser({ where: { id: args.id } }, info);
+    return await prisma.mutation.deleteUser({ where: { id: userId } }, info);
   },
   async createPost(parent, args, { prisma, request }, info) {
     const { title, body, published } = args.data;
