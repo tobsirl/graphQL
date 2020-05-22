@@ -4,14 +4,14 @@ import jwt from 'jsonwebtoken';
 // take in the password -> validate password -> hash password -> generate auth token
 // JSON Web Token (JWT)
 
-const token = jwt.sign({ id: 46 }, 'mysecret');
-console.log(token);
+// const token = jwt.sign({ id: 46 }, 'mysecret');
+// console.log(token);
 
-const decoded = jwt.decode(token);
-console.log(decoded);
+// const decoded = jwt.decode(token);
+// console.log(decoded);
 
-const verify = jwt.verify(token, 'mysecret');
-console.log(verify);
+// const verify = jwt.verify(token, 'mysecret');
+// console.log(verify);
 
 // using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
 // const dummy = async () => {
