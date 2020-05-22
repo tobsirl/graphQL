@@ -4,27 +4,27 @@ import jwt from 'jsonwebtoken';
 // take in the password -> validate password -> hash password -> generate auth token
 // JSON Web Token (JWT)
 
-// const token = jwt.sign({ id: 46 }, 'mysecret');
-// console.log(token);
+const token = jwt.sign({ id: 46 }, 'mysecret');
+console.log(token);
 
-// const decoded = jwt.decode(token);
-// console.log(decoded);
+const decoded = jwt.decode(token);
+console.log(decoded);
 
-// const verify = jwt.verify(token, 'mysecret');
-// console.log(verify);
+const verify = jwt.verify(token, 'mysecret');
+console.log(verify);
 
-using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
-const dummy = async () => {
-  const email = `rharris@example.com`;
-  const password = 'pass1234';
+// using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
+// const dummy = async () => {
+//   const email = `rharris@example.com`;
+//   const password = 'pass1234';
 
-  const hashedPassword = `$2a$10$dJpZmRGkej6y5ap0p3UMfudUZsci9g6jE9dZMsZc.UIgbr0iY5Yiq`;
+//   const hashedPassword = `$2a$10$dJpZmRGkej6y5ap0p3UMfudUZsci9g6jE9dZMsZc.UIgbr0iY5Yiq`;
 
-  const isMatch = await bcryptjs.compare(password, hashedPassword);
-  console.log(isMatch);
-};
+//   const isMatch = await bcryptjs.compare(password, hashedPassword);
+//   console.log(isMatch);
+// };
 
-dummy();
+// dummy();
 
 const Mutation = {
   async login(parent, args, { prisma }, info) {

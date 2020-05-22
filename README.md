@@ -796,5 +796,22 @@ const dummy = async () => {
 
 dummy();
 ```
+### Using JSON Web Tokens [link](https://www.npmjs.com/package/jsonwebtoken)
+Once the user has been authenticate (logged in) send back a JSON Web Token using `jwt.sign()`. This token can be used by the client to access protected data on the backend.
+```js 
+return {
+      user,
+      token: jwt.sign({ userId: user.id }, 'mysecret'),
+    };
+```
+```js
+const token = jwt.sign({ id: 46 }, 'mysecret');
+console.log(token);
 
+const decoded = jwt.decode(token);
+console.log(decoded);
+
+const verify = jwt.verify(token, 'mysecret');
+console.log(verify);
+```
 
