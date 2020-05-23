@@ -103,13 +103,20 @@ const Mutation = {
       info
     );
   },
-  async updatePost(parent, args, { prisma, request }, info) {
-    const { id, data } = args;
-
+  async updatePost(parent, { id, data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
+    const postExists = await prisma.exists.Post({
+      id,
+      author: {
+        id: userId,
+      },
+    });
+
+    if (!postExists) throw new Error(`Cannot update, post does not exist`);
+
     return await prisma.mutation.updatePost(
-      { where: { id: userId }, data: data },
+      { where: { id }, data: data },
       info
     );
   },
