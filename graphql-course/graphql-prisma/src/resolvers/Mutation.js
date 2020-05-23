@@ -134,14 +134,16 @@ const Mutation = {
 
     return await prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
-  async createComment(parent, args, { prisma }, info) {
-    const { text, author, post } = args.data;
+  async createComment(parent, args, { prisma, request }, info) {
+    const { text, post } = args.data;
+
+    const userId = getUserId(request);
 
     return await prisma.mutation.createComment(
       {
         data: {
           text: text,
-          author: { connect: { id: author } },
+          author: { connect: { id: userId } },
           post: { connect: { id: post } },
         },
       },
