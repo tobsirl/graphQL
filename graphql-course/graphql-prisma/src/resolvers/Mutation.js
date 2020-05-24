@@ -134,31 +134,51 @@ const Mutation = {
 
     return await prisma.mutation.deletePost({ where: { id: args.id } }, info);
   },
-  async createComment(parent, args, { prisma, request }, info) {
-    const { text, post } = args.data;
-
+  createComment(parent, args, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    return await prisma.mutation.createComment(
+    return prisma.mutation.createComment(
       {
         data: {
-          text: text,
+          text: args.data.text,
           author: { connect: { id: userId } },
-          post: { connect: { id: post } },
+          post: { connect: { id: args.data.post } },
         },
       },
       info
     );
   },
-  async updateComment(parent, args, { prisma }, info) {
-    const { id, data } = args;
+  async updateComment(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const commentExists = await prisma.exists.Comment({
+      id: args.id,
+      author: {
+        id: userId,
+      },
+    });
+
+    if (!commentExists)
+      throw new Error(`Cannot update, comment does not exist`);
 
     return await prisma.mutation.updateComment({
-      data: data,
-      where: { id: id },
+      where: { id: args.id },
+      data: args.data,
     });
   },
-  async deleteComment(parent, args, { prisma }, info) {
+  async deleteComment(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const commentExists = await prisma.exists.Comment({
+      id: args.id,
+      author: {
+        id: userId,
+      },
+    });
+
+    if (!commentExists)
+      throw new Error(`Cannot update, comment does not exist`);
+
     return await prisma.mutation.deleteComment(
       { where: { id: args.id } },
       info

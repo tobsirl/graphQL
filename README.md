@@ -683,8 +683,11 @@ type Post {
   comments: [Comment!]! @relation(name: "CommentToPost", onDelete: CASCADE)
 }
 ```
+
 ### Adding Prisma to graphQL queries
+
 Using the `info` parameter, `info` contains the query AST and more execution information
+
 ```js
 users(parent, args, { prisma }, info) {
     const opArgs = {};
@@ -700,6 +703,7 @@ users(parent, args, { prisma }, info) {
 ```
 
 ### Adding Prisma to graphQL mutations
+
 This dramatically reduces the amount of code required
 
 ```js
@@ -732,6 +736,7 @@ async createPost(parent, args, { prisma }, info) {
 ```
 
 ### Adding Prisma to graphQl subscriptions
+
 ```js
  comment: {
     subscribe(parent, { postId }, { prisma }, info) {
@@ -749,40 +754,55 @@ async createPost(parent, args, { prisma }, info) {
       );
     },
 ```
+
 ---
+
 ## Securing the backend Authentication
+
 ### Adding a secret to the server
+
 To restrict access to the database, Prisma allows a secret to be configured. The secret is similar to a password, is required in order to read and write from the database using Prisma API.
 Secret added to the prisma.yml
+
 ```ymal
 endpoint: http://192.168.99.100:4466
 datamodel: datamodel.prisma
 secret: thecakeisalie
 ```
+
 ### Generating Access Token
+
 Use the following command to generate a `Bearer Token`
+
 ```shell
 prisma token
 ```
+
 Add the generate token to the HTTP Authorization header
+
 ```json
 {
   "Authorization": "Bearer <<Generated Token>>"
 }
-``` 
+```
+
 ### Using bcryptjs [link](https://www.npmjs.com/package/bcryptjs)
+
 Using bcrypt to hash the password, this hashed password is stored in the database.
+
 ```js
 const password = await bcryptjs.hash(args.data.password, 10);
 
-    const user = await prisma.mutation.createUser({
-      data: {
-        ...args.data,
-        password,
-      },
-    });
+const user = await prisma.mutation.createUser({
+  data: {
+    ...args.data,
+    password,
+  },
+});
 ```
+
 Using bcryptjs compare to check if the password is a match (one way hash, compare doesn't decrypt the hashed password)
+
 ```js
 const dummy = async () => {
   const email = `rharris@example.com`;
@@ -796,14 +816,18 @@ const dummy = async () => {
 
 dummy();
 ```
+
 ### Using JSON Web Tokens [link](https://www.npmjs.com/package/jsonwebtoken)
+
 Once the user has been authenticate (logged in) send back a JSON Web Token using `jwt.sign()`. This token can be used by the client to access protected data on the backend.
-```js 
+
+```js
 return {
-      user,
-      token: jwt.sign({ userId: user.id }, 'mysecret'),
-    };
+  user,
+  token: jwt.sign({ userId: user.id }, 'mysecret'),
+};
 ```
+
 ```js
 const token = jwt.sign({ id: 46 }, 'mysecret');
 console.log(token);
@@ -815,3 +839,17 @@ const verify = jwt.verify(token, 'mysecret');
 console.log(verify);
 ```
 
+### Validating Auth Tokens
+
+To validate the user, pass the header into the application context. To do this you need to change context to a function.
+
+```js
+context(request) {
+    return {
+      db,
+      pubsub,
+      prisma,
+      request,
+    };
+  },
+```
