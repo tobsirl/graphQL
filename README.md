@@ -853,3 +853,26 @@ context(request) {
     };
   },
 ```
+
+The `request` object is passed to `getUserId`. `getUserId` is in charge of extracting the token from the authorization headers, verifying the token, and returning the authenticated user id.
+`getUserId` will throw an error if authentication fails for any reason.
+
+```js
+const getUserId = (request) => {
+  // get the header
+  const header = request.request.headers.authorization;
+
+  // throw an error if the header isn't available
+  if (!header) throw new Error(`Authentition required!`);
+
+  // get the token, remove bearer and space
+  // alternative header.split(' ')[1]
+  const token = header.replace('Bearer ', '');
+
+  // use jwt to verify the token
+  const decoded = jwt.verify(token, 'mysecret');
+
+  // return the userId
+  return decoded.userId;
+};
+```
