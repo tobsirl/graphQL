@@ -161,7 +161,7 @@ const Mutation = {
     if (!commentExists)
       throw new Error(`Cannot update, comment does not exist`);
 
-    return await prisma.mutation.updateComment({
+    return prisma.mutation.updateComment({
       where: { id: args.id },
       data: args.data,
     });
@@ -177,10 +177,14 @@ const Mutation = {
     });
 
     if (!commentExists)
-      throw new Error(`Cannot update, comment does not exist`);
+      throw new Error(`Cannot delete, comment does not exist`);
 
-    return await prisma.mutation.deleteComment(
-      { where: { id: args.id } },
+    return prisma.mutation.deleteComment(
+      {
+        where: {
+          id: args.id,
+        },
+      },
       info
     );
   },
