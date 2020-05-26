@@ -1,14 +1,17 @@
 import getUserId from '../utils/getUserId';
 
 const User = {
-  email(parent, args, { request }, info) {
-    const userId = getUserId(request, false);
+  email: {
+    fragment: 'fragment userId on User { id }',
+    resolve(parent, args, { request }, info) {
+      const userId = getUserId(request, false);
 
-    if (userId && parent.id === userId) {
-      return parent.email;
-    } else {
-      return null;
-    }
+      if (userId && userId === parent.id) {
+        return parent.email;
+      } else {
+        return null;
+      }
+    },
   },
 };
 
