@@ -20,6 +20,8 @@ const Query = {
     const userId = getUserId(request);
 
     const opArgs = {
+      first: args.first,
+      skip: args.skip,
       where: {
         author: {
           id: userId,
