@@ -1,5 +1,7 @@
-/node_modules
+node_modules/
 
 docker-compose.yml 
 
-/config
+config/
+
+dist/
