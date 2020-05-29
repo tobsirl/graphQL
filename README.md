@@ -876,3 +876,24 @@ const getUserId = (request) => {
   return decoded.userId;
 };
 ```
+
+### Fragments 
+Fragment provide a reuseable way to define a selection set.
+```js
+query {
+  users {
+    ...userFields
+    posts {
+      id
+      title
+      published
+    }
+  }
+}
+
+fragment userFields on User {
+  id
+  name
+  email
+}
+```
