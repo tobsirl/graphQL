@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Pokemon() {
+export default function Pokemon(props) {
   return (
     <div>
-      <p>Pokemon</p>
+      <p>{props.pokemon.name}</p>
     </div>
   );
 }
