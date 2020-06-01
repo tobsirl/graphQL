@@ -17,7 +17,11 @@ export default function Pokemon({ pokemon }) {
           alt={pokemon.name}
         />
       </div>
-      <div class="pokemon__attacks"></div>
+      <div className="pokemon__attacks">
+        {pokemon.attacks.special.map(({ name, damage }) => (
+          <span key={name + damage}>{name}</span>
+        ))}
+      </div>
     </div>
   );
 }
