@@ -11753,7 +11753,8 @@ exports.default = DefaultClient;
 },{"tslib":"..\\node_modules\\tslib\\tslib.es6.js","apollo-client":"..\\node_modules\\apollo-client\\bundle.esm.js","apollo-link":"..\\node_modules\\apollo-link\\lib\\bundle.esm.js","apollo-cache-inmemory":"..\\node_modules\\apollo-cache-inmemory\\lib\\bundle.esm.js","apollo-link-http":"..\\node_modules\\apollo-link-http\\lib\\bundle.esm.js","apollo-link-error":"..\\node_modules\\apollo-link-error\\lib\\bundle.esm.js","graphql-tag":"..\\node_modules\\graphql-tag\\src\\index.js","ts-invariant":"..\\node_modules\\ts-invariant\\lib\\invariant.esm.js"}],"index.js":[function(require,module,exports) {
 'use strict';
 
-var _templateObject = _taggedTemplateLiteral(['\n  query {\n    users {\n      id\n      name\n    }\n  }\n'], ['\n  query {\n    users {\n      id\n      name\n    }\n  }\n']);
+var _templateObject = _taggedTemplateLiteral(['\n  query {\n    users {\n      id\n      name\n    }\n  }\n'], ['\n  query {\n    users {\n      id\n      name\n    }\n  }\n']),
+    _templateObject2 = _taggedTemplateLiteral(['\n  query {\n    posts {\n      id\n      title\n      body\n      published\n      author {\n        name\n      }\n    }\n  }\n'], ['\n  query {\n    posts {\n      id\n      title\n      body\n      published\n      author {\n        name\n      }\n    }\n  }\n']);
 
 var _apolloBoost = require('apollo-boost');
 
@@ -11769,6 +11770,8 @@ var client = new _apolloBoost2.default({
 
 var getUsers = (0, _apolloBoost.gql)(_templateObject);
 
+var getPosts = (0, _apolloBoost.gql)(_templateObject2);
+
 client.query({
   query: getUsers
 }).then(function (response) {
@@ -11779,6 +11782,18 @@ client.query({
   });
 
   document.getElementById('users').innerHTML = html;
+});
+
+client.query({
+  query: getPosts
+}).then(function (response) {
+  var html = '';
+
+  response.data.posts.forEach(function (post) {
+    html += '\n        <div>\n          <p>' + post.title + '</p>\n          <p>' + post.author.name + '</p>\n        </div>\n      ';
+  });
+
+  document.getElementById('posts').innerHTML = html;
 });
 },{"apollo-boost":"..\\node_modules\\apollo-boost\\lib\\bundle.esm.js"}],"..\\node_modules\\parcel-bundler\\src\\builtins\\hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -11809,7 +11824,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '64017' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '64411' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

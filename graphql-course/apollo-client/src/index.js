@@ -13,6 +13,20 @@ const getUsers = gql`
   }
 `;
 
+const getPosts = gql`
+  query {
+    posts {
+      id
+      title
+      body
+      published
+      author {
+        name
+      }
+    }
+  }
+`;
+
 client
   .query({
     query: getUsers,
@@ -29,4 +43,23 @@ client
     });
 
     document.getElementById('users').innerHTML = html;
+  });
+
+client
+  .query({
+    query: getPosts,
+  })
+  .then((response) => {
+    let html = ``;
+
+    response.data.posts.forEach((post) => {
+      html += `
+        <div>
+          <p>${post.title}</p>
+          <p>${post.author.name}</p>
+        </div>
+      `;
+    });
+
+    document.getElementById('posts').innerHTML = html;
   });
