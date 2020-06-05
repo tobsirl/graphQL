@@ -1,12 +1,11 @@
 import 'cross-fetch/polyfill';
 import '@babel/polyfill';
-import ApolloBoost, { gql } from 'apollo-boost';
+import { gql } from 'apollo-boost';
 import prisma from '../src/prisma';
 import seedDatabase from './utils/seedDatabase';
+import getClient from './utils/getClient';
 
-const client = new ApolloBoost({
-  uri: 'http://localhost:4000/',
-});
+const client = getClient();
 
 beforeEach(seedDatabase);
 
@@ -56,8 +55,6 @@ test('should expose public author profiles', async () => {
   expect(response.data.users[0].email).toBe(null);
   expect(response.data.users[0].name).toBe('Jen');
 });
-
-
 
 test('should not login in with bad credentials', async () => {
   const login = gql`
