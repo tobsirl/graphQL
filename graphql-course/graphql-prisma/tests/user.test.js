@@ -9,26 +9,31 @@ const client = getClient();
 
 beforeEach(seedDatabase);
 
-test('should create a new user', async () => {
-  const createUser = gql`
-    mutation {
-      createUser(
-        data: {
-          name: "Piers Morgan"
-          email: "piers@example.com"
-          password: "pass1234"
-        }
-      ) {
-        token
-        user {
-          id
-        }
+const createUser = gql`
+  mutation($data: CreateUserInput!) {
+    createUser(data: $data) {
+      token
+      user {
+        id
+        name
+        email
       }
     }
-  `;
+  }
+`;
+
+test('should create a new user', async () => {
+  const variables = {
+    data: {
+      name: 'Piers Morgan',
+      email: 'piers@example.com',
+      password: 'pass1234',
+    },
+  };
 
   const response = await client.mutate({
     mutation: createUser,
+    variables,
   });
 
   const userExists = await prisma.exists.User({
