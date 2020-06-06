@@ -21,6 +21,15 @@ const postOne = {
   post: undefined,
 };
 
+const postTwo = {
+  input: {
+    title: "Jen's draft post",
+    body: "Body of Jen's draft post",
+    published: false,
+  },
+  post: undefined,
+};
+
 const seedDatabase = async () => {
   // delete test data
   await prisma.mutation.deleteManyPosts();
@@ -42,14 +51,12 @@ const seedDatabase = async () => {
   });
 
   // create post two
-  await prisma.mutation.createPost({
+  postTwo.post = await prisma.mutation.createPost({
     data: {
-      title: "Jen's draft post",
-      body: "Body of Jen's draft post",
-      published: false,
+      ...postTwo.input,
       author: { connect: { id: userOne.user.id } },
     },
   });
 };
 
-export { seedDatabase as default, userOne, postOne };
+export { seedDatabase as default, userOne, postOne, postTwo };
