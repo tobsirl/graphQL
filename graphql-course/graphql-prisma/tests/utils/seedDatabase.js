@@ -42,7 +42,14 @@ const postTwo = {
 
 const commentOne = {
   input: {
-    text: "Comment on Jen's post",
+    text: "Comment on James",
+  },
+  comment: undefined,
+};
+
+const commentTwo = {
+  input: {
+    text: "Comment on Jen",
   },
   comment: undefined,
 };
@@ -99,6 +106,31 @@ const seedDatabase = async () => {
       },
     },
   });
+
+  // create comment on the published post by the first user
+  commentTwo.comment = await prisma.mutation.createComment({
+    data: {
+      ...commentTwo.input,
+      author: {
+        connect: {
+          id: userOne.user.id,
+        },
+      },
+      post: {
+        connect: {
+          id: postOne.post.id,
+        },
+      },
+    },
+  });
 };
 
-export { seedDatabase as default, userOne, postOne, postTwo };
+export {
+  seedDatabase as default,
+  userOne,
+  userTwo,
+  postOne,
+  postTwo,
+  commentOne,
+  commentTwo,
+};
