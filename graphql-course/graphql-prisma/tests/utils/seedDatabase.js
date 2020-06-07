@@ -12,6 +12,16 @@ const userOne = {
   jwt: undefined,
 };
 
+const userTwo = {
+  input: {
+    name: 'James',
+    email: 'james@example.com',
+    password: bcrypt.hashSync('thecakeisalie'),
+  },
+  user: undefined,
+  jwt: undefined,
+}
+
 const postOne = {
   input: {
     title: "Jen's post",
@@ -32,6 +42,7 @@ const postTwo = {
 
 const seedDatabase = async () => {
   // delete test data
+  await prisma.mutation.deleteManyComments()
   await prisma.mutation.deleteManyPosts();
   await prisma.mutation.deleteManyUsers();
 
@@ -39,6 +50,11 @@ const seedDatabase = async () => {
   userOne.user = await prisma.mutation.createUser({
     data: userOne.input,
   });
+
+  // create userTwo
+  userTwo.user = await prisma.mutation.createUser({
+    data: userTwo.input
+  })
 
   userOne.jwt = jwt.sign({ userId: userOne.user.id }, process.env.JWT_SECRET);
 
