@@ -11,7 +11,7 @@
   "author": "Paul Tobin <tobster111@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^2.14.0",
+    "fastify": "^2.15.1",
     "fastify-gql": "^3.3.0",
     "graphql-tools": "^5.0.0"
   },
