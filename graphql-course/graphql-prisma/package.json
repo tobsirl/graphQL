@@ -30,7 +30,7 @@
     "cross-fetch": "^3.0.4",
     "env-cmd": "^10.1.0",
     "graphql": "^14.6.0",
-    "graphql-cli": "^3.0.14",
+    "graphql-cli": "^4.1.0",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
     "prisma-binding": "^2.3.16"
